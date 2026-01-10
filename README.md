@@ -25,7 +25,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 ### Elevator pitch
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Do you dare to try your luck... in binary? The binary mania game is a number-guessing game where you can compete against friends in real time to guess the correct binary number! Be sure to know your counting, because the only hint is whether the number is higher or lower than your guess. Binary mania inspires fun competition, as the scoreboard tracks every win and loss you have against your components. Binary mania will have you thinking in binary in no time.
 
 ### Design
 
