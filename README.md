@@ -1,4 +1,4 @@
-**Binary Mania**
+# Binary Mania
 
 [My Notes](notes.md)
 
