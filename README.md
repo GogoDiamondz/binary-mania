@@ -17,11 +17,11 @@ The ultimate binary number guessing game! Your only hope: a hint of higher or lo
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] Proper use of Markdown
-- [ ] A concise and compelling elevator pitch
-- [ ] Description of key features
-- [ ] Description of how you will use each technology
-- [ ] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
+- [x] Proper use of Markdown
+- [x] A concise and compelling elevator pitch
+- [x] Description of key features
+- [x] Description of how you will use each technology
+- [x] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
 
 ### Elevator pitch
 
@@ -37,20 +37,30 @@ Do you dare to try your luck... in binary? The binary mania game is a number-gue
 
 ### Key features
 
-- Describe your key feature
-- Describe your key feature
-- Describe your key feature
+- Secure log in over HTTPS
+- Ability to input binary numbers
+- Toggles for settings
+- Countdown timer in single-player mode
+- Display higher/lower for guesses
+- Game stops for both players when a player wins
+- Scoring wins/losses against players
 
 ### Technologies
 
 I am going to use the required technologies in the following ways.
 
-- **HTML** - Description here
-- **CSS** - Description here
-- **React** - Description here
-- **Service** - Description here
-- **DB/Login** - Description here
-- **WebSocket** - Description here
+- **HTML** - Uses 5 HTML pages: sign in, main menu, game session, scoreboard, and settings
+- **CSS** - Applying styling that spaces the interactable buttons and text appropriately for different screen sizes
+- **React** - Provides sign-in, buttons to input guesses, and toggles in settings
+- **Service** - Backend service endpoints for:
+    - sign-in
+    - retrieving a number
+    - submitting guesses
+    - submitting scores
+    - retrieving scores
+    - retrieving settings
+- **DB/Login** - Stores users, scores, and settings in the database. Register and sign in users.
+- **WebSocket** - When a player in multiplayer wins, the game is stopped for all players and the winner is announced.
 
 ## 🚀 AWS deliverable
 
