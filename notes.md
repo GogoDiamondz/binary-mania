@@ -10,7 +10,11 @@
 
 ## AWS
 
-My IP address is: http://52.23.193.18/
+My IP address is: 52.23.193.18
+
+http://52.23.193.18/
+
+Command to get into my remote shell:  ssh -i [key pair file] ubuntu@52.23.193.18
 
 ## Caddy
 
