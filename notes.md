@@ -26,6 +26,16 @@ This was easy. I was careful to use the correct structural elements such as head
 
 The part I didn't like was the duplication of the header and footer code. This is messy, but it will get cleaned up when I get to React.
 
+Structure for play:
+- header
+- player name
+- friend's name
+- winner (hidden until win)
+- higher/lower
+- input display box
+- 0 and 1
+- footer
+
 ## CSS
 
 This took a couple hours to get it how I wanted. It was important to make it responsive and Bootstrap helped with that. It looks great on all kinds of screen sizes.
