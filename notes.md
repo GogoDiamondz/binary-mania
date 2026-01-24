@@ -43,7 +43,10 @@ Structure for friends:
   - friend's name
   - wins
   - losses
-  - invite button
+  - invite/accept/cancel button or offline status
+- table containing:
+  - players online
+  - friend request/accept/decline button
 - footer
 
 Structure for profile:
