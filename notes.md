@@ -44,6 +44,15 @@ Structure for friends:
   - wins
   - losses
   - invite button
+- footer
+
+Structure for profile:
+- header
+- "[username]'s profile"
+- singleplayer best time
+- random quote or image
+- log out
+- footer
 
 ## CSS
 
