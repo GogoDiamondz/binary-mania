@@ -24,13 +24,11 @@ Do you dare to try your luck... in binary? The binary mania game is a number-gue
 ![Main Menu](main_menu.jpg)
 ![Game Session](game_session.jpg)
 ![Scoreboard](scoreboard.jpg)
-![Settings](settings.jpg)
 
 ### Key features
 
 - Secure log in over HTTPS
 - Ability to input binary numbers
-- Toggles for settings
 - Countdown timer in single-player mode
 - Display higher/lower for guesses
 - Game stops for both players when a player wins
@@ -40,17 +38,16 @@ Do you dare to try your luck... in binary? The binary mania game is a number-gue
 
 I am going to use the required technologies in the following ways.
 
-- **HTML** - Uses 5 HTML pages: sign in, main menu, game session, scoreboard, and settings
+- **HTML** - Uses 4 HTML pages: home, play, friends, and profile
 - **CSS** - Applying styling that spaces the interactable buttons and text appropriately for different screen sizes
-- **React** - Provides sign-in, buttons to input guesses, and toggles in settings
+- **React** - Provides sign-in and buttons to input guesses
 - **Service** - Backend service endpoints for:
     - sign-in
     - retrieving a number
     - submitting guesses
     - submitting scores
     - retrieving scores
-    - retrieving settings
-- **DB/Login** - Stores users, scores, and settings in the database. Register and sign in users.
+- **DB/Login** - Stores users, friends, and scores in the database. Register and sign in users.
 - **WebSocket** - When a player in multiplayer wins, the game is stopped for all players and the winner is announced.
 
 ## 🚀 AWS deliverable
