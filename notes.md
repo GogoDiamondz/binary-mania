@@ -36,6 +36,15 @@ Structure for play:
 - 0 and 1
 - footer
 
+Structure for friends:
+- header
+- 'Your Friends'
+- table containing:
+  - friend's name
+  - wins
+  - losses
+  - invite button
+
 ## CSS
 
 This took a couple hours to get it how I wanted. It was important to make it responsive and Bootstrap helped with that. It looks great on all kinds of screen sizes.
