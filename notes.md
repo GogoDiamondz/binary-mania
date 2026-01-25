@@ -53,7 +53,7 @@ Structure for profile:
 - header
 - "[username]'s profile"
 - singleplayer best time
-- random quote or image
+- random duck image
 - log out
 - footer
 
