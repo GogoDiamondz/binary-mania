@@ -7,6 +7,32 @@ body {
 
 header {
   flex: 0 0 auto;
+  height: 3em;
+  font-size: 1em;
+  display: flex;
+  text-align: center;
+  background-color: lightgreen;
+}
+
+header h1 {
+  flex: .1 1 auto;
+  font-size: 1.5em;
+  background-color: lightgray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+nav {
+  flex: .1 1 auto;
+  display: flex;
+  justify-content: space-between;
+  background-color: lightcoral;
+}
+
+nav div {
+  flex: 1 1 auto;
+  padding: 1em;
 }
 
 main {
@@ -21,4 +47,13 @@ main {
 footer {
   flex: 0 0 auto;
   background-color: lightgray;
+  display: flex;
+  justify-content: space-between;
+  padding: .3em;
+}
+
+@media (max-width: 600px) {
+  header, nav, footer {
+    display: none;
+  }
 }
