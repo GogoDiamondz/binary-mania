@@ -11,13 +11,13 @@ header {
   font-size: 1em;
   display: flex;
   text-align: center;
-  background-color: lightgreen;
+  background-color: darkblue;
+  color: white;
 }
 
 header h1 {
   flex: .1 1 auto;
   font-size: 1.5em;
-  background-color: lightgray;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -27,12 +27,12 @@ nav {
   flex: .1 1 auto;
   display: flex;
   justify-content: space-between;
-  background-color: lightcoral;
 }
 
 nav div {
   flex: 1 1 auto;
   padding: 1em;
+  background-color: white;
 }
 
 main {
@@ -58,10 +58,15 @@ main {
 
 footer {
   flex: 0 0 auto;
-  background-color: lightgray;
+  background-color: darkblue;
+  color: white;
   display: flex;
   justify-content: space-between;
   padding: .3em;
+}
+
+footer a {
+  background-color: white;
 }
 
 @media (max-width: 600px) {
