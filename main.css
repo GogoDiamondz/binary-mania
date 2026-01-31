@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+h1, h2 {
+  font-family: 'Orbitron';
+}
+
 body {
   display: flex;
   flex-direction: column;
@@ -13,6 +19,7 @@ header {
   text-align: center;
   background-color: darkblue;
   color: white;
+  font-family: 'Orbitron';
 }
 
 header h1 {
@@ -47,6 +54,7 @@ footer {
   display: flex;
   justify-content: space-between;
   padding: .3em;
+  font-family: 'Orbitron';
 }
 
 footer a {

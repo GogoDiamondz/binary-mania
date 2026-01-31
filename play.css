@@ -2,6 +2,7 @@ main {
     display: flex;
     flex-direction: column;
     text-align: center;
+    font-family: sans-serif
 }
 
 .players {
@@ -27,5 +28,6 @@ main {
     justify-content: center;
     align-items: center;
     gap: 1em;
+    font-family: 'Orbitron';
 }
 
