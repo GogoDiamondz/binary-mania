@@ -1,3 +1,15 @@
 main {
     font-family: sans-serif;
 }
+
+table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid darkblue;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
