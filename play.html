@@ -26,20 +26,21 @@
 
         <main>
             <div class="players">
-                <p>Player: <span id="player-name">[your username]</span></p>
-                <p>Friend: <span id="friend-name">[friend's username]</span></p>
+                <p>>> Friend: <span id="friend-name">[friend's username]</span></p>
             </div>
             <div hidden class="notification">
                 <span id="winner-text">[player] won!</span>
             </div>
             <div class="game-container">
-               <span id="hint">Higher / Lower</span>
-               <span class="input">[input]</span>
+               <h1 id="hint">Higher / Lower</h1>
+               <span id="input-container">
+                <h2 class="input">00100100</h2>
+               </span>
                <button-container>
-                   <button>0</button>
-                   <button>1</button>
+                   <button id="zero">0</button>
+                   <button id="one">1</button>
                </button-container>
-            <button>Submit</button>
+            <button id="submit">Submit</button>
             </div>
         </main>
 

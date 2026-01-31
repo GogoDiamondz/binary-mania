@@ -2,7 +2,7 @@ main {
     display: flex;
     flex-direction: column;
     text-align: center;
-    font-family: sans-serif
+    font-family: 'Orbitron';
 }
 
 .players {
@@ -23,11 +23,42 @@ main {
 
 .game-container {
     flex: 8;
+    background-color: black;
+    color: white;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 1em;
-    font-family: 'Orbitron';
 }
 
+button-container {
+    flex: 0 1 auto;
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    height: 5em;
+    width: 15em;
+}
+
+#zero, #one {
+    flex: 1;
+}
+
+#submit {
+    margin-top: 1em;
+    padding: 0.5em 2em;
+    font-size: 1.2em;
+}
+
+#input-container {
+    color: greenyellow;
+    background-color: black;
+    border: 5px white inset;
+    padding: 0.5em 1em;
+    min-width: 10em;
+}
+
+.input {
+    font-family: sans-serif;
+}
