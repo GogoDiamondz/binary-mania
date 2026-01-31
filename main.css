@@ -37,6 +37,7 @@ nav div {
 
 main {
   background-color: rgb(209, 255, 209);
+  flex: 1;
 }
 
 footer {
