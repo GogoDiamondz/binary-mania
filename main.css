@@ -35,6 +35,10 @@ nav div {
   background-color: white;
 }
 
+main {
+  background-color: rgb(209, 255, 209);
+}
+
 footer {
   flex: 0 0 auto;
   background-color: darkblue;
