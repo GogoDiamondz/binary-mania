@@ -4,7 +4,7 @@ h1, h2 {
   font-family: 'Orbitron';
 }
 
-body {
+.body {
   display: flex;
   flex-direction: column;
   height: 100vh;
