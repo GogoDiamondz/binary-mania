@@ -20,10 +20,10 @@ Do you dare to try your luck... in binary? The binary mania game is a number-gue
 
 ### Design
 
-![Sign In](sign_in.jpg)
-![Main Menu](main_menu.jpg)
-![Game Session](game_session.jpg)
-![Scoreboard](scoreboard.jpg)
+![Sign In](design-images/sign_in.jpg)
+![Main Menu](design-images/main_menu.jpg)
+![Game Session](design-images/game_session.jpg)
+![Scoreboard](design-images/scoreboard.jpg)
 
 ### Key features
 
