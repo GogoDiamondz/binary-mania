@@ -1,14 +1,14 @@
-main {
+.profile-main {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-main h1 {
+.profile-main h1 {
     margin-top: 0.5em;
 }
 
-main p {
+.profile-main p {
     font-family: sans-serif;
 }
 
