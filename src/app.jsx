@@ -6,8 +6,8 @@ import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { Play } from './play/play';
 import { Friends } from './friends/friends';
 import { Profile } from './profile/profile';
-import { Login } from './login/login';
-import { AuthState } from './login/authState';
+import { Home } from './home/home';
+import { AuthState } from './home/authState';
 
 export default function App() {
     const [userName, setUserName] = React.useState(localStorage.getItem('userName') || '');
@@ -34,7 +34,7 @@ export default function App() {
             
             <Routes>
                 <Route path="/" element={
-                    <Login 
+                    <Home 
                         userName={userName}
                         authState={authState}
                         onAuthChange={(userName, authState) => {
