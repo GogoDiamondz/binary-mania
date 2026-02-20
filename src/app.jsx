@@ -5,7 +5,7 @@ import './app.css';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { Play } from './play/play';
 import { Friends } from './friends/friends';
-import { Profile } from './profile/profile';
+import { Profile } from './home/profile';
 import { Home } from './home/home';
 import { AuthState } from './home/authState';
 
@@ -27,8 +27,6 @@ export default function App() {
                     {authState === AuthState.Authenticated && (
                         <div><NavLink to="/friends">Friends</NavLink></div>
                     )}
-                    {/* TODO: replace 'home' with 'profile' once logged in */}
-                    <div><NavLink to="/profile">Profile</NavLink></div>
                 </nav>
             </header>
             
