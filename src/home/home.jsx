@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './home.css';
+
 import { Login } from './login';
 import { Profile } from './profile';
 import { AuthState } from './authState';
@@ -22,7 +24,7 @@ export function Home({ userName, authState, onAuthChange }) {
                 {authState === AuthState.Authenticated && (
                     <Profile 
                         userName={userName} 
-                        onLogOut={() => {
+                        onLogout={() => {
                             onAuthChange('', AuthState.Unauthenticated);
                         }}
                     />

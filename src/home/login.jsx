@@ -10,7 +10,7 @@ export function Login(props) {
   }
 
   return (
-    <main className="login-main">
+    <main>
       <div className="login-box">
         <h1>Welcome to Binary Mania</h1>
         <div>

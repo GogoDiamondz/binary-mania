@@ -1,14 +1,3 @@
-.login-main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-image: url("binary-img.jpg");
-  background-size: cover;
-  background-position: center;
-  color: black;
-}
-
 .login-box {
   display: flex;
   flex-direction: column;
