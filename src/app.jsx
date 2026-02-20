@@ -5,7 +5,6 @@ import './app.css';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { Play } from './play/play';
 import { Friends } from './friends/friends';
-import { Profile } from './home/profile';
 import { Home } from './home/home';
 import { AuthState } from './home/authState';
 
@@ -43,7 +42,6 @@ export default function App() {
                     } />
                 <Route path="/play" element={<Play />} />
                 <Route path="/friends" element={<Friends />} />
-                <Route path="/profile" element={<Profile />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
 
