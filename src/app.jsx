@@ -57,7 +57,7 @@ export default function App() {
 
             <footer>
                 <span className="text-reset">Hannah Heydorn</span>
-                <a href="https://github.com/GogoDiamondz/binary-mania">GitHub</a>
+                <a href="https://github.com/GogoDiamondz/binary-mania" id='github'>GitHub</a>
             </footer>
         </div>
     </BrowserRouter>
