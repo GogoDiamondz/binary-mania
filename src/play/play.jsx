@@ -8,12 +8,15 @@ export function Play() {
 
     return (
         <main className="play-main">
-            <button onClick={() => navigate('/game')}>
-                Singleplayer
-            </button>
-            <button onClick={() => navigate('/friends')}>
-                Multiplayer
-            </button>
+            <div className="play-box">
+                <h1>Choose Game Mode</h1>
+                <button id='singleplayer' onClick={() => navigate('/game')}>
+                    Singleplayer
+                </button>
+                <button id='multiplayer' onClick={() => navigate('/friends')}>
+                    Multiplayer
+                </button>
+            </div>
         </main>
     );
 }

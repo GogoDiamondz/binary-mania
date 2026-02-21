@@ -1,0 +1,29 @@
+.play-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-image: url("/binary-img.jpg");
+    background-size: cover;
+    background-position: center;
+    color: black;
+    font-family: Orbitron, sans-serif;
+}
+
+.play-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 40px;
+    border-radius: 10px;
+}
+
+#singleplayer, #multiplayer {
+    width: 200px;
+    height: 50px;
+    margin: 10px;
+    font-size: 18px;
+    cursor: pointer;
+}
