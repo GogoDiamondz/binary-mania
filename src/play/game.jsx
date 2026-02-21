@@ -6,6 +6,7 @@ export function Game(props) {
     const userName = props.userName;
     const friendName = props.friendName
     const onGameEnd = props.onGameEnd;
+    const gameOver = props.gameOver;
     const [target, setTarget] = React.useState(0);
     const [hint, setHint] = React.useState("");
     const [guess, setGuess] = React.useState("");
@@ -19,6 +20,7 @@ export function Game(props) {
     }, []);
 
     function handleBinaryClick(digit) {
+        if (gameOver) return;
         if (tryAgain) {
             setGuess(digit);
             setTryAgain(false);
@@ -29,6 +31,7 @@ export function Game(props) {
     }
 
     function handleSubmit() {
+        if (gameOver) return;
         if (!guess) return;
 
         const guessDecimal = parseInt(guess, 2);
@@ -43,6 +46,17 @@ export function Game(props) {
         }
         setTryAgain(true);
     }
+
+    // Simulate friend winning after 10 seconds for demonstration purposes
+    React.useEffect(() => {
+        if (gameOver) return;
+
+        const interval = setInterval(() => {
+            onGameEnd(friendName);
+        }, 10000);
+
+        return () => clearInterval(interval);
+    }, [gameOver, friendName, onGameEnd]);
 
     return (
         <div className="game-container">

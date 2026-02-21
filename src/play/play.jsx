@@ -7,6 +7,7 @@ import { Players } from './players';
 
 export function Play(props) {
   const userName = props.userName;
+  const friendName = props.friendName || "[friend name goes here]"; // TODO: make multiplayer functionality linked from friends page
   const [gameOver, setGameOver] = React.useState(false);
   const [winner, setWinner] = React.useState(null);
 
@@ -18,13 +19,14 @@ export function Play(props) {
   return (
       <main className="play-main">
         <Players 
-          friendName={"friend name goes here"} // TODO: make multiplayer functionality linked from friends page
+          friendName={friendName}
           winner={winner}
           gameOver={gameOver}
         />
         <Game
           userName={userName}
-          friendName={"friend name goes here"} // TODO: make multiplayer functionality linked from friends page
+          friendName={friendName}
+          gameOver={gameOver}
           onGameEnd={handleGameEnd}
         />
       </main>
