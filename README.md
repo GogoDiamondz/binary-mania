@@ -93,7 +93,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [x] **All functionality implemented or mocked out** - Login is enforced. The play tab is now interactable. Friends are mocked out.
+- [x] **All functionality implemented or mocked out** - Login is enforced. Localstorage is used to store userName. The play tab is now interactable. Friend requests and multiplayer functionality are mocked out (WebSocket functionality to fill in later).
 - [x] **Hooks** - I used useState, useLocation, and useEffect for mocked functionality, multiplayer capability, friends, and number guessing in gameplay.
 
 ## 🚀 Service deliverable
