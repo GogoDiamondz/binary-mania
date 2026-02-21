@@ -4,6 +4,7 @@ import './app.css';
 
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { Play } from './play/play';
+import { GameSession } from './play/gameSession';
 import { Friends } from './friends/friends';
 import { Home } from './home/home';
 import { AuthState } from './home/authState';
@@ -41,7 +42,10 @@ export default function App() {
                     />
                     } />
                 <Route path="/play" element={
-                    <Play 
+                    <Play />
+                    } />
+                <Route path="/game" element={
+                    <GameSession 
                         userName={userName}
                         gameState={null}
                         winner={null}

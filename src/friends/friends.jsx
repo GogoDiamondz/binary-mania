@@ -31,7 +31,7 @@ export function Friends(props) {
     function handlePlay(friendName) {
         // Logic to start a game with the selected friend
         console.log(`Starting a game with ${friendName}`);
-        navigate("/play", { state: { friendName } });
+        navigate("/game", { state: { friendName } });
     }
 
     function handleFriendRequest(playerName) {
