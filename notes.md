@@ -81,4 +81,11 @@ Setting up Vite and React was pretty simple. I had a bit of trouble because of c
 ## React Part 2: Reactivity
 
 This was a lot of fun to see it all come together. I had to keep remembering to use React state instead of just manipulating the DOM directly.
+
+Changed layout of game: "Play" now leads to "Game session" which holds capabilities for either multiplayer or singleplayer. Multiplayer is accessible through friends menu.
+
+Needs implementation:
+- friend game request
+- add current user to online players
+- friend requests list and accept button (requests lists can go between friends and online players)
 ```
