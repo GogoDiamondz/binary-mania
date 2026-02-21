@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from "react-router-dom";
 
 import './play.css';
 
@@ -6,8 +7,9 @@ import { Game } from './game';
 import { Players } from './players';
 
 export function Play(props) {
+  const location = useLocation();
   const userName = props.userName;
-  const friendName = props.friendName || "[friend name goes here]"; // TODO: make multiplayer functionality linked from friends page
+  const friendName = location.state?.friendName || 'placeholder friend';
   const [gameOver, setGameOver] = React.useState(false);
   const [winner, setWinner] = React.useState(null);
 
@@ -16,6 +18,7 @@ export function Play(props) {
     setWinner(winner);
   }
 
+  //TODO: add options for singleplayer or multiplayer
   return (
       <main className="play-main">
         <Players 
