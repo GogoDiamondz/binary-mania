@@ -1,8 +1,8 @@
 export class Player {
-    constructor(name, yourWins = null, friendWins = null, isFriend = false) {
+    constructor(name, friendStatus = 'none', yourWins = 0, friendWins = 0) {
         this.name = name;
         this.yourWins = yourWins;
         this.friendWins = friendWins;
-        this.isFriend = isFriend;
+        this.friendStatus = friendStatus; // 'none', 'pending', 'friend'
     }
 }

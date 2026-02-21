@@ -8,15 +8,15 @@ export function Friends(props) {
   const userName = props.userName;
   const [friends, setFriends] = React.useState([]);
   const [onlinePlayers, setOnlinePlayers] = React.useState([]);
-  const friendsRows = [];
+  const [pendingRequests, setPendingRequests] = React.useState([]);
 
   React.useEffect(() => {
     // Fetch friends and online players data from the server
     // For now, we will use hardcoded data for demonstration
     setFriends([
-      new Player('Alice', 10, 5, true),
-      new Player('Bob', 7, 8, true),
-      new Player('Carlos', 15, 3, true)
+      new Player('Alice', 'friend', 10, 5),
+      new Player('Bob', 'friend', 7, 8),
+      new Player('Carlos', 'friend', 15, 3)
     ]);
 
     setOnlinePlayers([
@@ -32,9 +32,31 @@ export function Friends(props) {
   }
 
   function handleFriendRequest(playerName) {
-    // Logic to send a friend request to the selected player
+    // Mock sending a friend request to the player
     console.log(`Sending friend request to ${playerName}`);
+    setPendingRequests(prev => [...prev, playerName]);
+    setOnlinePlayers(prev =>
+    prev.map(player =>
+        player.name === playerName
+            ? { ...player, friendStatus: "pending" }
+            : player
+        )
+    );
+
+    setTimeout(() => {
+        console.log(`${playerName} accepted your friend request!`);
+        setPendingRequests(prev => prev.filter(name => name !== playerName));
+        setFriends(prev => [...prev, new Player(playerName, 'friend')]);
+        setOnlinePlayers(prev =>
+            prev.map(player =>
+                player.name === playerName
+                ? { ...player, friendStatus: "friend" }
+                : player
+            )
+        );
+    }, 2000);
   }
+    
 
   return (
       <main>
@@ -77,9 +99,13 @@ export function Friends(props) {
                 <tr key={player.name}>
                     <td>{player.name}</td>
                     <td>
+                        {player.friendStatus === 'none' && (
                         <button onClick={() => handleFriendRequest(player.name)}>
                             Add Friend
                         </button>
+                        )}
+                        {player.friendStatus === 'pending' && <span>Pending...</span>}
+                        {player.friendStatus === 'friend' && <span>Friend</span>}
                     </td>
                 </tr>
             ))}
