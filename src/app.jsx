@@ -40,7 +40,13 @@ export default function App() {
                         }}
                     />
                     } />
-                <Route path="/play" element={<Play />} />
+                <Route path="/play" element={
+                    <Play 
+                        userName={userName}
+                        gameState={null}
+                        winner={null}
+                    />
+                    } />
                 <Route path="/friends" element={<Friends />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>

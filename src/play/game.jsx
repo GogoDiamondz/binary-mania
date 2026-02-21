@@ -2,7 +2,11 @@ import React from "react";
 
 import "./game.css";
 
-export function Game() {
+export function Game(props) {
+    const userName = props.userName;
+    const friendName = props.friendName
+    const onGameEnd = props.onGameEnd;
+
     return (
         <div className="game-container">
             <h1 id="hint">Higher / Lower</h1>
@@ -13,7 +17,8 @@ export function Game() {
                 <button id="zero">0</button>
                 <button id="one">1</button>
             </button-container>
-            <button id="submit">Submit</button>
+            {/* FIXME change functionality -- this is a test */}
+            <button id="submit" onClick={() => props.onGameEnd(userName)}>Submit</button>
         </div>
     )
 }
