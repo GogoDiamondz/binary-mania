@@ -1,0 +1,15 @@
+.players {
+    flex: .1;
+    margin: 1em;
+    display: flex;
+    flex-direction: column;
+}
+
+.players p {
+    margin: 0.2em;
+}
+
+.notification {
+    flex: 1;
+    margin: 1em;
+}
