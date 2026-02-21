@@ -1,11 +1,11 @@
-.players {
+.gameInfo {
     flex: .1;
     margin: 1em;
     display: flex;
     flex-direction: column;
 }
 
-.players p {
+.gameInfo p {
     margin: 0.2em;
 }
 

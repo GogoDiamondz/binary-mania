@@ -7,6 +7,7 @@ export function Game(props) {
     const friendName = props.friendName
     const onGameEnd = props.onGameEnd;
     const gameOver = props.gameOver;
+    const onTimeScoreChange = props.onTimeScoreChange;
     const [target, setTarget] = React.useState(0);
     const [hint, setHint] = React.useState("");
     const [guess, setGuess] = React.useState("");
@@ -46,6 +47,16 @@ export function Game(props) {
         }
         setTryAgain(true);
     }
+
+    // Singleplayer functionality
+    React.useEffect(() => {
+        if (friendName || gameOver) return;
+        const interval = setInterval(() => {
+            onTimeScoreChange(prev => prev + 1);
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [friendName, gameOver]);
 
     // Simulate friend winning after 10 seconds for demonstration purposes
     React.useEffect(() => {

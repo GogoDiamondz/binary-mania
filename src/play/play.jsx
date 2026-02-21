@@ -8,7 +8,7 @@ export function Play() {
 
     return (
         <main className="play-main">
-            <button onClick={() => console.log('Singleplayer button clicked!')}>
+            <button onClick={() => navigate('/game')}>
                 Singleplayer
             </button>
             <button onClick={() => navigate('/friends')}>
