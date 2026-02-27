@@ -1,8 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 import "./game.css";
 
 export function Game(props) {
+    const navigate = useNavigate();
     const userName = props.userName;
     const friendName = props.friendName
     const onGameEnd = props.onGameEnd;
@@ -79,7 +81,13 @@ export function Game(props) {
                 <button id="zero" onClick={() => handleBinaryClick("0")}>0</button>
                 <button id="one" onClick={() => handleBinaryClick("1")}>1</button>
             </button-container>
-            <button id="submit" onClick={handleSubmit}>Submit</button>
+            {guess && !gameOver && <button id="submit" onClick={handleSubmit}>Submit</button>}
+            {gameOver &&
+                <div className="game-over-buttons">
+                    <button id="home" onClick={() => navigate("/")}>Home</button>
+                    {!friendName && <button id="play-again" onClick={() => window.location.reload()}>Retry</button>}
+                </div>
+            }
         </div>
     )
 }

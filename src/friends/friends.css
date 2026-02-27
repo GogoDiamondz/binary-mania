@@ -3,6 +3,24 @@ main {
     color: black;
 }
 
+.top-bar {
+    text-align: center;
+    width: 100%;
+}
+
+#home {
+    font-family: 'Orbitron';
+    width: 100%;
+    background-color: darkblue;
+    color: white;
+    padding: 0.5em;
+    border: none;
+}
+
+h1, h2 {
+    margin: 0.5em 0;
+}
+
 table {
     table-layout: fixed;
     width: 100%;
@@ -13,4 +31,17 @@ th, td {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+@media (max-width: 600px) {
+    .table {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+@media (min-width: 601px) {
+    #home {
+        display: none;
+    }
 }

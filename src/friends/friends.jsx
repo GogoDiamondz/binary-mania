@@ -63,6 +63,9 @@ export function Friends(props) {
 
     return (
         <main>
+            <div className="top-bar">
+                <button id="home" onClick={() => navigate("/")}>Home</button>
+            </div>
             <h1>Your Friends</h1>
             <table className="table">
                 <thead>

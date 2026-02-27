@@ -39,3 +39,16 @@ button-container {
 .input {
     font-family: sans-serif;
 }
+
+.game-over-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+}
+
+#play-again, #home {
+    width: 100px;
+    padding: 0.5em 1em;
+    font-size: 1em;
+    background-color: lightgreen;
+}
