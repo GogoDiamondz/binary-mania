@@ -5,6 +5,11 @@ export function Login(props) {
   const [userName, setUserName] = React.useState(props.userName || '');
   const [password, setPassword] = React.useState('');
 
+  async function onRegister() {
+    localStorage.setItem('userName', userName);
+    props.onRegister(userName);
+  }
+
   async function loginUser() {
     localStorage.setItem('userName', userName);
     props.onLogin(userName);
@@ -20,6 +25,7 @@ export function Login(props) {
         <div>
             <input type="password" placeholder="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
+        <button type="submit" onClick={() => onRegister()} disabled={!userName || !password}>Register</button>
         <button type="submit" onClick={() => loginUser()} disabled={!userName || !password}>Login</button>
       </div>
     </main>

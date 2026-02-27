@@ -16,6 +16,9 @@ export function Home({ userName, authState, onAuthChange }) {
                 {authState === AuthState.Unauthenticated && (
                     <Login 
                         userName={userName}
+                        onRegister={(inputUserName) => {
+                            onAuthChange(inputUserName, AuthState.Authenticated)
+                        }}
                         onLogin={(inputUserName) => {
                             onAuthChange(inputUserName, AuthState.Authenticated)
                         }}
