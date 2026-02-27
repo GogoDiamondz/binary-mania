@@ -42,7 +42,7 @@ export function Game(props) {
         } else if (guessDecimal < target) {
             setHint("Higher");
         } else {
-            console.log("nailed it.");
+            setHint("Nailed it.");
             onGameEnd(userName);
         }
         setTryAgain(true);

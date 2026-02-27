@@ -6,7 +6,6 @@ export function Players(props) {
     const friendName = props.friendName;
     const gameOver = props.gameOver;
     const winner = props.winner;
-    const timeRemaining = props.timeRemaining;
     
     return (
         <div>
