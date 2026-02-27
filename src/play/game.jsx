@@ -73,7 +73,7 @@ export function Game(props) {
 
     return (
         <div className="game-container">
-            <h1 id="hint">{hint || "Guess up to 8 digits"}</h1>
+            <h1 id="hint">{hint || (gameOver ? "Game Over" : "Guess up to 8 digits")}</h1>
             <span id="input-container">
             <h2 className="input">{guess}</h2>
             </span>
