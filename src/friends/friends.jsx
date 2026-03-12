@@ -10,7 +10,7 @@ export function Friends(props) {
     const userName = props.userName;
     const [friends, setFriends] = React.useState([]);
     const [onlinePlayers, setOnlinePlayers] = React.useState([]);
-    const [pendingRequests, setPendingRequests] = React.useState([]);
+    const [friendRequests, setFriendRequests] = React.useState([]);
 
     React.useEffect(() => {
         // Fetch friends and online players data from the server
@@ -26,6 +26,11 @@ export function Friends(props) {
             new Player('Eve'),
             new Player('Frank')
         ]);
+
+        setFriendRequests([
+            new Player('Grace', 'pending'),
+            new Player('Heidi', 'pending')
+        ]);
     }, []);
 
     function handlePlay(friendName) {
@@ -34,10 +39,9 @@ export function Friends(props) {
         navigate("/game", { state: { friendName } });
     }
 
-    function handleFriendRequest(playerName) {
+    function handleSendRequest(playerName) {
         // Mock sending a friend request to the player
         console.log(`Sending friend request to ${playerName}`);
-        setPendingRequests(prev => [...prev, playerName]);
         setOnlinePlayers(prev =>
         prev.map(player =>
             player.name === playerName
@@ -48,7 +52,7 @@ export function Friends(props) {
 
         setTimeout(() => {
             console.log(`${playerName} accepted your friend request!`);
-            setPendingRequests(prev => prev.filter(name => name !== playerName));
+            setFriendRequests(prev => prev.filter(name => name !== playerName));
             setFriends(prev => [...prev, new Player(playerName, 'friend')]);
             setOnlinePlayers(prev =>
                 prev.map(player =>
@@ -59,6 +63,19 @@ export function Friends(props) {
             );
         }, 2000);
     }
+
+    function handleAcceptRequest(requestName) {
+        // Mock accepting a friend request
+        setFriendRequests(prev => prev.filter(request => request.name !== requestName));
+        setFriends(prev => [...prev, new Player(requestName, 'friend')]);
+        console.log(`Accepted friend request from ${requestName}`);
+    }
+
+    function handleDeclineRequest(requestName) {
+        // Mock declining a friend request
+        setFriendRequests(prev => prev.filter(request => request.name !== requestName));
+        console.log(`Declined friend request from ${requestName}`);
+    }
         
 
     return (
@@ -66,6 +83,7 @@ export function Friends(props) {
             <div className="top-bar">
                 <button id="home" onClick={() => navigate("/")}>Home</button>
             </div>
+
             <h1>Your Friends</h1>
             <table className="table">
                 <thead>
@@ -92,6 +110,31 @@ export function Friends(props) {
                 </tbody>
             </table>
 
+            <h2>Your Friend Requests</h2>
+            <table className="table" id="friend-requests">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Request</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {friendRequests.map(request => (
+                        <tr key={request.name}>
+                            <td>{request.name}</td>
+                            <td>
+                                <button onClick={() => handleAcceptRequest(request.name)}>
+                                    Accept
+                                </button>
+                                <button onClick={() => handleDeclineRequest(request.name)}>
+                                    Decline
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+
             <h2>Players Online</h2>
             <table className="table">
                 <thead>
@@ -106,7 +149,7 @@ export function Friends(props) {
                         <td>{player.name}</td>
                         <td>
                             {player.friendStatus === 'none' && (
-                            <button onClick={() => handleFriendRequest(player.name)}>
+                            <button onClick={() => handleSendRequest(player.name)}>
                                 Add Friend
                             </button>
                             )}

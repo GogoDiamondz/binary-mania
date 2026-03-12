@@ -33,6 +33,10 @@ th, td {
     text-overflow: ellipsis;
 }
 
+#friend-requests > tbody > tr > td > button {
+    margin-right: 0.5em;
+}
+
 @media (max-width: 600px) {
     .table {
         display: block;

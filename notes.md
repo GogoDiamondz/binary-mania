@@ -87,7 +87,6 @@ Changed layout of game: "Play" now leads to "Game session" which holds capabilit
 Needs implementation:
 - friend game request
 - add current user to online players
-- friend requests list and accept button (requests lists can go between friends and online players)
 - user's best time
 - accessibility on mobile
 ```
