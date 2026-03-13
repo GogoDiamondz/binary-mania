@@ -20,10 +20,26 @@ export function Login(props) {
       <div className="login-box">
         <h1>Welcome to Binary Mania</h1>
         <div>
-          <input type="text" placeholder="username" value={userName} onChange={(e) => setUserName(e.target.value)} />
+          <input
+            id="username"
+            name="username"
+            type="text"
+            autoComplete="username"
+            placeholder="username"
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
+          />
         </div>
         <div>
-            <input type="password" placeholder="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <input
+            id="password"
+            name="password"
+            type="password"
+            autoComplete="current-password"
+            placeholder="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </div>
         <button type="submit" onClick={() => onRegister()} disabled={!userName || !password}>Register</button>
         <button type="submit" onClick={() => loginUser()} disabled={!userName || !password}>Login</button>
