@@ -7,35 +7,45 @@ import { Player } from './player';
 
 export function Friends(props) {
     const navigate = useNavigate();
-    const userName = props.userName;
+    const [userName, setUserName] = React.useState('');
     const [friends, setFriends] = React.useState([]);
     const [onlinePlayers, setOnlinePlayers] = React.useState([]);
     const [friendRequests, setFriendRequests] = React.useState([]);
 
     React.useEffect(() => {
-        setFriends([
-        new Player('Alice', 'friend', 10, 5),
-        new Player('Bob', 'friend', 7, 8),
-        new Player('Carlos', 'friend', 15, 3)
-        ]);
+        async function loadData() {
+            try {
+                const userRes = await fetch('/api/user');
+                if (!userRes.ok) throw new Error(`Failed to load user (${userRes.status})`);
+                const userData = await userRes.json();
+                setUserName(userData.userName);
+                
+                const friendsRes = await fetch('/api/friends');
+                if (!friendsRes.ok) throw new Error(`Failed to load friends (${friendsRes.status})`);
+                const friendsData = await friendsRes.json();
+                setFriends(friendsData.map(name => new Player(name, 'friend')));
+                const friendNames = new Set(friendsData);
 
-        setOnlinePlayers([
-            new Player('Dave', 'none'),
-            new Player('Eve', 'none'),
-            new Player('Frank', 'none')
-        ]);
+                const onlineRes = await fetch('/api/players/online');
+                if (!onlineRes.ok) throw new Error(`Failed to load online players (${onlineRes.status})`);
+                const onlineData = await onlineRes.json();
+                setOnlinePlayers(
+                    onlineData
+                        .filter(p => p.userName !== userName)
+                        .map(p => new Player(p.userName, friendNames.has(p.userName) ? 'friend' : 'none'))
+                );
+            } catch (err) {
+                console.error(err);
+            }
+        }
 
-        fetch('/api/players/online')
-            .then(res => res.json())
-            .then(onlinePlayers => setOnlinePlayers(
-                prev => [...prev, ...onlinePlayers.map(p => new Player(p.userName))]
-            ));
+        loadData();
 
         setFriendRequests([
             new Player('Grace', 'pending'),
             new Player('Heidi', 'pending')
         ]);
-    }, []);
+    }, [userName]);
 
     function handlePlay(friendName) {
         // Logic to start a game with the selected friend
@@ -56,7 +66,7 @@ export function Friends(props) {
 
         setTimeout(() => {
             console.log(`${playerName} accepted your friend request!`);
-            setFriendRequests(prev => prev.filter(name => name !== playerName));
+            setFriendRequests(prev => prev.filter(request => request.name !== playerName));
             setFriends(prev => [...prev, new Player(playerName, 'friend')]);
             setOnlinePlayers(prev =>
                 prev.map(player =>
@@ -68,9 +78,14 @@ export function Friends(props) {
         }, 2000);
     }
 
-    function handleAcceptRequest(requestName) {
+    async function handleAcceptRequest(requestName) {
         // Mock accepting a friend request
         setFriendRequests(prev => prev.filter(request => request.name !== requestName));
+        await fetch('/api/friends', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(new Player(requestName, 'friend')),
+        });
         setFriends(prev => [...prev, new Player(requestName, 'friend')]);
         console.log(`Accepted friend request from ${requestName}`);
     }

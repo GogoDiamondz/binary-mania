@@ -71,6 +71,54 @@ apiRouter.get('/players/online', verifyAuth, (req, res) => {
   res.send(onlinePlayers);
 });
 
+// Get friends list
+apiRouter.get('/friends', verifyAuth, async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  if (user) {
+    res.send(user.friends);
+  } else {
+    res.status(401).send({ msg: 'Unauthorized' });
+  }
+});
+
+// Add a friend
+apiRouter.post('/friends', verifyAuth, async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  const friend = await findUser('userName', req.body.name);
+  if (user && friend) {
+    if (!user.friends.includes(req.body.name)) {
+      user.friends.push(friend.userName);
+      res.send({ msg: 'Friend added' });
+    } else {
+      res.status(409).send({ msg: 'Already friends' });
+    }
+  } else {
+    res.status(404).send({ msg: 'User or friend not found' });
+  }
+});
+
+// Remove a friend
+apiRouter.delete('/friends/:friendName', verifyAuth, async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  if (user) {
+    const index = user.friends.indexOf(req.params.friendName);
+    if (index > -1) {
+      user.friends.splice(index, 1);
+      res.send({ msg: 'Friend removed' });
+    } else {
+      res.status(404).send({ msg: 'Friend not found' });
+    }
+  } else {
+    res.status(401).send({ msg: 'Unauthorized' });
+  }
+});
+
+// Get user
+apiRouter.get('/user', verifyAuth, async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  res.send({ userName: user.userName });
+});
+
 // Default error handler
 app.use(function (err, req, res, next) {
   res.status(500).send({ type: err.name, message: err.message });
@@ -84,6 +132,7 @@ async function createUser(userName, password) {
     password: passwordHash,
     token: uuid.v4(),
     online: false,
+    friends: [],
   };
   users.push(user);
 

@@ -85,8 +85,7 @@ This was a lot of fun to see it all come together. I had to keep remembering to 
 Changed layout of game: "Play" now leads to "Game session" which holds capabilities for either multiplayer or singleplayer. Multiplayer is accessible through friends menu.
 
 Needs implementation:
+- accepting a friend request adds you to friend's friend list
 - friend game request
-- add current user to online players
 - user's best time
-- accessibility on mobile
 ```
