@@ -15,8 +15,12 @@ export function Profile(props) {
   }
 
   function logout() {
-    localStorage.removeItem('userName');
-    props.onLogout();
+    fetch('/api/auth/logout', {
+      method: 'delete',
+    }).then(() => {
+      localStorage.removeItem('userName');
+      props.onLogout();
+    });
   }
 
   return (

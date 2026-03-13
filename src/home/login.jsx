@@ -1,18 +1,44 @@
 import React from 'react';
 import './login.css';
+import { MessageDialog } from './messageDialog';
 
 export function Login(props) {
   const [userName, setUserName] = React.useState(props.userName || '');
   const [password, setPassword] = React.useState('');
+  const [displayError, setDisplayError] = React.useState(null);
 
-  async function onRegister() {
-    localStorage.setItem('userName', userName);
-    props.onRegister(userName);
+  async function registerUser() {
+    const response = await fetch('/api/auth/create', {
+      method: 'post',
+      body: JSON.stringify({ userName: userName, password: password }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+    if (response?.status === 200) {
+      localStorage.setItem('userName', userName);
+      props.onLogin(userName);
+    } else {
+      const body = await response.json();
+      setDisplayError(`⚠ Error: ${body.msg}`);
+    }
   }
 
   async function loginUser() {
-    localStorage.setItem('userName', userName);
-    props.onLogin(userName);
+    const response = await fetch('/api/auth/login', {
+      method: 'post',
+      body: JSON.stringify({ userName: userName, password: password }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+    if (response?.status === 200) {
+      localStorage.setItem('userName', userName);
+      props.onLogin(userName);
+    } else {
+      const body = await response.json();
+      setDisplayError(`⚠ Error: ${body.msg}`);
+    }
   }
 
   return (
@@ -41,9 +67,10 @@ export function Login(props) {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit" onClick={() => onRegister()} disabled={!userName || !password}>Register</button>
+        <button type="submit" onClick={() => registerUser()} disabled={!userName || !password}>Register</button>
         <button type="submit" onClick={() => loginUser()} disabled={!userName || !password}>Login</button>
       </div>
+      <MessageDialog message={displayError} onHide={() => setDisplayError(null)} />
     </main>
   );
 }
