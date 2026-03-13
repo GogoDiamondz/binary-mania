@@ -13,8 +13,6 @@ export function Friends(props) {
     const [friendRequests, setFriendRequests] = React.useState([]);
 
     React.useEffect(() => {
-        // Fetch friends and online players data from the server
-        // For now, we will use hardcoded data for demonstration
         setFriends([
         new Player('Alice', 'friend', 10, 5),
         new Player('Bob', 'friend', 7, 8),
@@ -22,10 +20,16 @@ export function Friends(props) {
         ]);
 
         setOnlinePlayers([
-            new Player('Dave'),
-            new Player('Eve'),
-            new Player('Frank')
+            new Player('Dave', 'none'),
+            new Player('Eve', 'none'),
+            new Player('Frank', 'none')
         ]);
+
+        fetch('/api/players/online')
+            .then(res => res.json())
+            .then(onlinePlayers => setOnlinePlayers(
+                prev => [...prev, ...onlinePlayers.map(p => new Player(p.userName))]
+            ));
 
         setFriendRequests([
             new Player('Grace', 'pending'),
