@@ -12,31 +12,30 @@ export function Friends(props) {
     const [onlinePlayers, setOnlinePlayers] = React.useState([]);
     const [friendRequests, setFriendRequests] = React.useState([]);
 
-    React.useEffect(() => {
-        async function loadData() {
-            try {
-                const userRes = await fetch('/api/user');
-                if (!userRes.ok) throw new Error(`Failed to load user (${userRes.status})`);
-                const userData = await userRes.json();
-                setUser(userData);
-                
-                const friendsRes = await fetch('/api/friends');
-                if (!friendsRes.ok) throw new Error(`Failed to load friends (${friendsRes.status})`);
-                const friendsData = await friendsRes.json();
-                setFriends(friendsData);
+    const loadData = React.useCallback(async () => {
+        try {
+            const userRes = await fetch('/api/user');
+            if (!userRes.ok) throw new Error(`Failed to load user (${userRes.status})`);
+            const userData = await userRes.json();
+            setUser(userData);
+            
+            const friendsRes = await fetch('/api/friends');
+            if (!friendsRes.ok) throw new Error(`Failed to load friends (${friendsRes.status})`);
+            const friendsData = await friendsRes.json();
+            setFriends(friendsData);
 
-                const onlineRes = await fetch('/api/players/online');
-                if (!onlineRes.ok) throw new Error(`Failed to load online players (${onlineRes.status})`);
-                const onlineData = await onlineRes.json();
-                setOnlinePlayers(onlineData.filter(p => p.userName !== userData.userName));
-            } catch (err) {
-                console.error(err);
-            }
+            const onlineRes = await fetch('/api/players/online');
+            if (!onlineRes.ok) throw new Error(`Failed to load online players (${onlineRes.status})`);
+            const onlineData = await onlineRes.json();
+            setOnlinePlayers(onlineData.filter(p => p.userName !== userData.userName));
+        } catch (err) {
+        console.error(err);
         }
-
-        loadData();
-
     }, []);
+
+    React.useEffect(() => {
+        loadData();
+     }, [loadData]);
 
     function handlePlay(friendName) {
         // Logic to start a game with the selected friend
@@ -44,41 +43,22 @@ export function Friends(props) {
         navigate("/game", { state: { friendName } });
     }
 
-    function handleSendRequest(playerName) {
-        // Mock sending a friend request to the player
-        console.log(`Sending friend request to ${playerName}`);
-        setOnlinePlayers(prev =>
-        prev.map(player =>
-            player.name === playerName
-                ? { ...player, friendStatus: "pending" }
-                : player
-            )
-        );
-
-        setTimeout(() => {
-            console.log(`${playerName} accepted your friend request!`);
-            setFriendRequests(prev => prev.filter(request => request.name !== playerName));
-            setFriends(prev => [...prev, new Player(playerName, 'friend')]);
-            setOnlinePlayers(prev =>
-                prev.map(player =>
-                    player.name === playerName
-                    ? { ...player, friendStatus: "friend" }
-                    : player
-                )
-            );
-        }, 2000);
+    async function handleSendRequest(playerName) {
+        await fetch('/api/friends/request', {
+            method: 'PUT',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ name: playerName })
+        });
+        await loadData();
     }
 
     async function handleAcceptRequest(requestName) {
-        // Mock accepting a friend request
-        setFriendRequests(prev => prev.filter(request => request.name !== requestName));
         await fetch('/api/friends', {
-            method: 'POST',
+            method: 'PUT',
             headers: { 'content-type': 'application/json' },
-            body: JSON.stringify(new Player(requestName, 'friend')),
+            body: JSON.stringify({ name: requestName })
         });
-        setFriends(prev => [...prev, new Player(requestName, 'friend')]);
-        console.log(`Accepted friend request from ${requestName}`);
+        await loadData();
     }
 
     function handleDeclineRequest(requestName) {
@@ -158,13 +138,23 @@ export function Friends(props) {
                     <tr key={player.userName}>
                         <td>{player.userName}</td>
                         <td>
-                            {!user?.friends?.includes(player.userName) && (
-                            <button onClick={() => handleSendRequest(player.userName)}>
-                                Add Friend
-                            </button>
-                            )}
+                            {!user?.friends?.includes(player.userName)
+                            && !user?.pendingRequests?.includes(player.userName) && 
+                            !user?.friendRequests?.includes(player.userName) &&
+                                <button onClick={() => handleSendRequest(player.userName)}>
+                                    Add Friend
+                                </button>
+                            }
+                            {user?.friendRequests?.includes(player.userName) && 
+                                <button onClick={() => handleAcceptRequest(player.userName)}>
+                                    Accept
+                                </button>}
                             {user?.pendingRequests?.includes(player.userName) && <span>Pending...</span>}
-                            {user?.friends?.includes(player.userName) && <span>Friend</span>}
+                            {user?.friends?.includes(player.userName) && 
+                            !user?.friendRequests?.includes(player.userName) &&
+                            !user?.pendingRequests?.includes(player.userName) &&
+                            !user?.friends?.includes(player.userName) &&
+                            <span>Friend</span>}
                         </td>
                     </tr>
                 ))}

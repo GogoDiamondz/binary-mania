@@ -165,7 +165,14 @@ apiRouter.delete('/friends/:friendName', verifyAuth, async (req, res) => {
 // Get user
 apiRouter.get('/user', verifyAuth, async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
-  res.send({ userName: user.userName });
+  res.send({
+    userName: user.userName,
+    bestTime: user.bestTime,
+    friends: user.friends,
+    pendingRequests: user.pendingRequests,
+    friendRequests: user.friendRequests,
+    gameRequest: user.gameRequest,
+  });
 });
 
 // Default error handler
