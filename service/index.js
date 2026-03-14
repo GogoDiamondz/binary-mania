@@ -83,7 +83,7 @@ apiRouter.get('/friends', verifyAuth, async (req, res) => {
 });
 
 // Add a friend
-apiRouter.post('/friends', verifyAuth, async (req, res) => {
+apiRouter.put('/friends', verifyAuth, async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
   const friend = await findUser('userName', req.body.name);
   if (user && friend) {
@@ -92,6 +92,54 @@ apiRouter.post('/friends', verifyAuth, async (req, res) => {
       res.send({ msg: 'Friend added' });
     } else {
       res.status(409).send({ msg: 'Already friends' });
+    }
+  } else {
+    res.status(404).send({ msg: 'User or friend not found' });
+  }
+});
+
+apiRouter.put('/friends/request', verifyAuth, async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  const friend = await findUser('userName', req.body.name);
+  if (user && friend) {
+    if (!user.pendingRequests.includes(req.body.name) && !user.friends.includes(req.body.name)) {
+      user.pendingRequests.push(friend.userName);
+      friend.friendRequests.push(user.userName);
+      res.send({ msg: 'Friend request sent' });
+    } else {
+      res.status(409).send({ msg: 'Request already sent or already friends' });
+    }
+  } else {
+    res.status(404).send({ msg: 'User or friend not found' });
+  }
+});
+
+apiRouter.put('/friends/request/accept', verifyAuth, async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  const friend = await findUser('userName', req.body.name);
+  if (user && friend) {
+    if (user.pendingRequests.includes(req.body.name)) {
+      user.pendingRequests = user.pendingRequests.filter(name => name !== req.body.name);
+      user.friends.push(friend.userName);
+      friend.friends.push(user.userName);
+      res.send({ msg: 'Friend request accepted' });
+    } else {
+      res.status(404).send({ msg: 'Friend request not found' });
+    }
+  } else {
+    res.status(404).send({ msg: 'User or friend not found' });
+  }
+});
+
+apiRouter.delete('/friends/request/decline', verifyAuth, async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  const friend = await findUser('userName', req.body.name);
+  if (user && friend) {
+    if (user.pendingRequests.includes(req.body.name)) {
+      user.pendingRequests = user.pendingRequests.filter(name => name !== req.body.name);
+      res.send({ msg: 'Friend request declined' });
+    } else {
+      res.status(404).send({ msg: 'Friend request not found' });
     }
   } else {
     res.status(404).send({ msg: 'User or friend not found' });
