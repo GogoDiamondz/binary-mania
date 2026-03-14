@@ -49,7 +49,8 @@ apiRouter.delete('/auth/logout', async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
     delete user.token;
-    user.online = false;
+    //FIXME: uncomment this
+    //user.online = false;
   }
   res.clearCookie(authCookieName);
   res.status(204).end();
@@ -67,7 +68,7 @@ const verifyAuth = async (req, res, next) => {
 
 // Get online players
 apiRouter.get('/players/online', verifyAuth, (req, res) => {
-  const onlinePlayers = users.filter(u => u.online).map(u => ({ userName: u.userName }));
+  const onlinePlayers = users.filter(u => u.online);
   res.send(onlinePlayers);
 });
 
@@ -132,7 +133,11 @@ async function createUser(userName, password) {
     password: passwordHash,
     token: uuid.v4(),
     online: false,
+    bestTime: 'None',
     friends: [],
+    friendRequests: [],
+    pendingRequests: [],
+    gameRequest: null,
   };
   users.push(user);
 

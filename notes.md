@@ -85,7 +85,9 @@ This was a lot of fun to see it all come together. I had to keep remembering to 
 Changed layout of game: "Play" now leads to "Game session" which holds capabilities for either multiplayer or singleplayer. Multiplayer is accessible through friends menu.
 
 Needs implementation:
+- user's best time
+- save wins and losses
 - accepting a friend request adds you to friend's friend list
 - friend game request
-- user's best time
+- random duck picture
 ```

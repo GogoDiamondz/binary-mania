@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 
 import './friends.css';
 
-import { Player } from './player';
+import { Friend } from './friend';
 
 export function Friends(props) {
     const navigate = useNavigate();
-    const [userName, setUserName] = React.useState('');
+    const [user, setUser] = React.useState(null);
     const [friends, setFriends] = React.useState([]);
     const [onlinePlayers, setOnlinePlayers] = React.useState([]);
     const [friendRequests, setFriendRequests] = React.useState([]);
@@ -18,22 +18,17 @@ export function Friends(props) {
                 const userRes = await fetch('/api/user');
                 if (!userRes.ok) throw new Error(`Failed to load user (${userRes.status})`);
                 const userData = await userRes.json();
-                setUserName(userData.userName);
+                setUser(userData);
                 
                 const friendsRes = await fetch('/api/friends');
                 if (!friendsRes.ok) throw new Error(`Failed to load friends (${friendsRes.status})`);
                 const friendsData = await friendsRes.json();
-                setFriends(friendsData.map(name => new Player(name, 'friend')));
-                const friendNames = new Set(friendsData);
+                setFriends(friendsData);
 
                 const onlineRes = await fetch('/api/players/online');
                 if (!onlineRes.ok) throw new Error(`Failed to load online players (${onlineRes.status})`);
                 const onlineData = await onlineRes.json();
-                setOnlinePlayers(
-                    onlineData
-                        .filter(p => p.userName !== userName)
-                        .map(p => new Player(p.userName, friendNames.has(p.userName) ? 'friend' : 'none'))
-                );
+                setOnlinePlayers(onlineData.filter(p => p.userName !== userData.userName));
             } catch (err) {
                 console.error(err);
             }
@@ -41,11 +36,7 @@ export function Friends(props) {
 
         loadData();
 
-        setFriendRequests([
-            new Player('Grace', 'pending'),
-            new Player('Heidi', 'pending')
-        ]);
-    }, [userName]);
+    }, []);
 
     function handlePlay(friendName) {
         // Logic to start a game with the selected friend
@@ -164,16 +155,16 @@ export function Friends(props) {
             </thead>
             <tbody>
                 {onlinePlayers.map(player => (
-                    <tr key={player.name}>
-                        <td>{player.name}</td>
+                    <tr key={player.userName}>
+                        <td>{player.userName}</td>
                         <td>
-                            {player.friendStatus === 'none' && (
-                            <button onClick={() => handleSendRequest(player.name)}>
+                            {!user?.friends?.includes(player.userName) && (
+                            <button onClick={() => handleSendRequest(player.userName)}>
                                 Add Friend
                             </button>
                             )}
-                            {player.friendStatus === 'pending' && <span>Pending...</span>}
-                            {player.friendStatus === 'friend' && <span>Friend</span>}
+                            {user?.pendingRequests?.includes(player.userName) && <span>Pending...</span>}
+                            {user?.friends?.includes(player.userName) && <span>Friend</span>}
                         </td>
                     </tr>
                 ))}
