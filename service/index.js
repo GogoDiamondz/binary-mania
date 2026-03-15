@@ -177,6 +177,13 @@ apiRouter.get('/user', verifyAuth, async (req, res) => {
   });
 });
 
+// Get best time score
+apiRouter.get('/singleplayer/score', verifyAuth, async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  res.send({ bestTime: user.bestTime });
+});
+
+
 // Update best time score
 apiRouter.put('/singleplayer/score', verifyAuth, async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
