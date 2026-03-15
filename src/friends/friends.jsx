@@ -8,7 +8,6 @@ export function Friends(props) {
     const [user, setUser] = React.useState(null);
     const [friends, setFriends] = React.useState([]);
     const [onlinePlayers, setOnlinePlayers] = React.useState([]);
-    const [friendRequests, setFriendRequests] = React.useState([]);
 
     const loadData = React.useCallback(async () => {
         try {
@@ -70,9 +69,17 @@ export function Friends(props) {
     }
 
     function handleDeclineRequest(requestName) {
-        // Mock declining a friend request
-        setFriendRequests(prev => prev.filter(request => request.name !== requestName));
-        console.log(`Declined friend request from ${requestName}`);
+        fetch('/api/friends/request/remove', {
+            method: 'DELETE',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ name: requestName })
+        });
+         fetch('/api/friends/request/pending/remove', {
+            method: 'DELETE',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ name: requestName })
+        });
+        loadData();
     }
         
 
@@ -117,14 +124,14 @@ export function Friends(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {friendRequests.map(request => (
-                        <tr key={request.name}>
-                            <td>{request.name}</td>
+                    {user?.friendRequests?.map(request => (
+                        <tr key={request}>
+                            <td>{request}</td>
                             <td>
-                                <button onClick={() => handleAcceptRequest(request.name)}>
+                                <button onClick={() => handleAcceptRequest(request)}>
                                     Accept
                                 </button>
-                                <button onClick={() => handleDeclineRequest(request.name)}>
+                                <button onClick={() => handleDeclineRequest(request)}>
                                     Decline
                                 </button>
                             </td>
