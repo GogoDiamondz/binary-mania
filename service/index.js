@@ -87,8 +87,8 @@ apiRouter.put('/friends', verifyAuth, async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
   const friend = await findUser('userName', req.body.name);
   if (user && friend) {
-    if (!user.friends.includes(req.body.name)) {
-      user.friends.push(friend.userName);
+    if (!user.friends.map(f => f.name).includes(req.body.name)) {
+      user.friends.push(req.body);
       res.send({ msg: 'Friend added' });
     } else {
       res.status(409).send({ msg: 'Already friends' });
@@ -114,30 +114,13 @@ apiRouter.put('/friends/request', verifyAuth, async (req, res) => {
   }
 });
 
-apiRouter.put('/friends/request/accept', verifyAuth, async (req, res) => {
+apiRouter.delete('/friends/request/remove', verifyAuth, async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
   const friend = await findUser('userName', req.body.name);
   if (user && friend) {
-    if (user.pendingRequests.includes(req.body.name)) {
-      user.pendingRequests = user.pendingRequests.filter(name => name !== req.body.name);
-      user.friends.push(friend.userName);
-      friend.friends.push(user.userName);
-      res.send({ msg: 'Friend request accepted' });
-    } else {
-      res.status(404).send({ msg: 'Friend request not found' });
-    }
-  } else {
-    res.status(404).send({ msg: 'User or friend not found' });
-  }
-});
-
-apiRouter.delete('/friends/request/decline', verifyAuth, async (req, res) => {
-  const user = await findUser('token', req.cookies[authCookieName]);
-  const friend = await findUser('userName', req.body.name);
-  if (user && friend) {
-    if (user.pendingRequests.includes(req.body.name)) {
-      user.pendingRequests = user.pendingRequests.filter(name => name !== req.body.name);
-      res.send({ msg: 'Friend request declined' });
+    if (user.friendRequests.includes(req.body.name)) {
+      user.friendRequests = user.friendRequests.filter(name => name !== req.body.name);
+      res.send({ msg: 'Friend request removed' });
     } else {
       res.status(404).send({ msg: 'Friend request not found' });
     }

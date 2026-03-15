@@ -2,8 +2,7 @@ import React from 'react';
 import { useNavigate } from "react-router-dom";
 
 import './friends.css';
-
-import { Friend } from './friend';
+import { Friend } from './friend.js';
 
 export function Friends(props) {
     const navigate = useNavigate();
@@ -55,6 +54,11 @@ export function Friends(props) {
     async function handleAcceptRequest(requestName) {
         await fetch('/api/friends', {
             method: 'PUT',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(new Friend(requestName))
+        });
+        await fetch('/api/friends/request/remove', {
+            method: 'DELETE',
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify({ name: requestName })
         });
@@ -138,7 +142,7 @@ export function Friends(props) {
                     <tr key={player.userName}>
                         <td>{player.userName}</td>
                         <td>
-                            {!user?.friends?.includes(player.userName)
+                            {!user?.friends?.map(f => f.name).includes(player.userName)
                             && !user?.pendingRequests?.includes(player.userName) && 
                             !user?.friendRequests?.includes(player.userName) &&
                                 <button onClick={() => handleSendRequest(player.userName)}>
@@ -150,10 +154,9 @@ export function Friends(props) {
                                     Accept
                                 </button>}
                             {user?.pendingRequests?.includes(player.userName) && <span>Pending...</span>}
-                            {user?.friends?.includes(player.userName) && 
+                            {user?.friends?.map(f => f.name).includes(player.userName) && 
                             !user?.friendRequests?.includes(player.userName) &&
                             !user?.pendingRequests?.includes(player.userName) &&
-                            !user?.friends?.includes(player.userName) &&
                             <span>Friend</span>}
                         </td>
                     </tr>

@@ -1,6 +1,6 @@
 export class Friend {
-    constructor(user, yourWins = 0, friendWins = 0, gameRequest = false) {
-        this.user = user;
+    constructor(name, yourWins = 0, friendWins = 0, gameRequest = false) {
+        this.name = name;
         this.yourWins = yourWins;
         this.friendWins = friendWins;
         this.gameRequest = gameRequest;
