@@ -177,6 +177,42 @@ apiRouter.get('/user', verifyAuth, async (req, res) => {
   });
 });
 
+// Update best time score
+apiRouter.put('/singleplayer/score', verifyAuth, async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  if (user) {
+    user.bestTime = req.body.bestTime;
+    res.send({ msg: 'Best time updated' });
+  } else {
+    res.status(404).send({ msg: 'User not found' });
+  }
+});
+
+// Update multiplayer score
+apiRouter.put('/multiplayer/score', verifyAuth, async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  const friend = await findUser('userName', req.body.friendName);
+  if (user && friend) {
+    const userFriend = user.friends.find(f => f.name === req.body.friendName);
+    const friendUser = friend.friends.find(f => f.name === user.userName);
+    if (userFriend && friendUser) {
+      if (req.body.winner === 'user') {
+        userFriend.yourWins += 1;
+        friendUser.friendWins += 1;
+      } else if (req.body.winner === 'friend') {
+        userFriend.friendWins += 1;
+        friendUser.yourWins += 1;
+      }
+      res.send({ msg: 'Multiplayer score updated' });
+    } else {
+      res.status(404).send({ msg: 'Friend relationship not found' });
+    }
+  } else {
+    res.status(404).send({ msg: 'User or friend not found' });
+  }
+});
+
+
 // Default error handler
 app.use(function (err, req, res, next) {
   res.status(500).send({ type: err.name, message: err.message });
