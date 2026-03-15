@@ -46,11 +46,25 @@ export function GameSession(props) {
     }
   }
 
+  async function updateMultiplayerScore(winner) {
+    try {
+      await fetch('/api/multiplayer/score', {
+        method: 'PUT',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ friendName, winner: winner === userName ? 'user' : 'friend' })
+      });
+    }
+    catch (err) {
+      console.error('Failed to update multiplayer score', err);
+    }
+  }
+
   function handleGameEnd(winner) {
     setGameOver(true);
 
     if (friendName) {
       setWinner(winner);
+      updateMultiplayerScore(winner);
     } else {
       updateBestTimeIfLower(timeScore);
     }
