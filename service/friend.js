@@ -1,4 +1,4 @@
-export class Friend {
+class Friend {
     constructor(name, yourWins = 0, friendWins = 0, gameRequest = false) {
         this.name = name;
         this.yourWins = yourWins;
@@ -6,3 +6,5 @@ export class Friend {
         this.gameRequest = gameRequest;
     }
 }
+
+module.exports = Friend;

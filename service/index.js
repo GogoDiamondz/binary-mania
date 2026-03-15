@@ -6,6 +6,8 @@ const express = require('express');
 const uuid = require('uuid');
 const app = express();
 
+const Friend = require('./friend.js');
+
 const authCookieName = 'token';
 
 let users = [];
@@ -88,7 +90,8 @@ apiRouter.put('/friends', verifyAuth, async (req, res) => {
   const friend = await findUser('userName', req.body.name);
   if (user && friend) {
     if (!user.friends.map(f => f.name).includes(req.body.name)) {
-      user.friends.push(req.body);
+      user.friends.push(new Friend(friend.userName));
+      friend.friends.push(new Friend(user.userName));
       res.send({ msg: 'Friend added' });
     } else {
       res.status(409).send({ msg: 'Already friends' });

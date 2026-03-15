@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate } from "react-router-dom";
 
 import './friends.css';
-import { Friend } from './friend.js';
 
 export function Friends(props) {
     const navigate = useNavigate();
@@ -55,7 +54,7 @@ export function Friends(props) {
         await fetch('/api/friends', {
             method: 'PUT',
             headers: { 'content-type': 'application/json' },
-            body: JSON.stringify(new Friend(requestName))
+            body: JSON.stringify({ name: requestName })
         });
         await fetch('/api/friends/request/remove', {
             method: 'DELETE',
