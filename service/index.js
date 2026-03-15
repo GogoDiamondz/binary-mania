@@ -132,6 +132,22 @@ apiRouter.delete('/friends/request/remove', verifyAuth, async (req, res) => {
   }
 });
 
+// Remove a pending request
+apiRouter.delete('/friends/request/pending/remove', verifyAuth, async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  const friend = await findUser('userName', req.body.name);
+  if (user && friend) {
+    if (friend.pendingRequests.includes(user.userName)) {
+      friend.pendingRequests = friend.pendingRequests.filter(name => name !== user.userName);
+      res.send({ msg: `${user.userName} removed from ${friend.userName}'s pending requests` });
+    } else {
+      res.status(404).send({ msg: 'Pending request not found' });
+    }
+  } else {
+    res.status(404).send({ msg: 'User or friend not found' });
+  }
+});
+
 // Remove a friend
 apiRouter.delete('/friends/:friendName', verifyAuth, async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);

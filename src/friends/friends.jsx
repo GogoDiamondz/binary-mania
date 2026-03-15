@@ -61,6 +61,11 @@ export function Friends(props) {
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify({ name: requestName })
         });
+        await fetch('/api/friends/request/pending/remove', {
+            method: 'DELETE',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ name: requestName })
+        });
         await loadData();
     }
 
