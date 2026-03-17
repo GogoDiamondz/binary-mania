@@ -8,6 +8,7 @@ export function Friends(props) {
     const [user, setUser] = React.useState(null);
     const [friends, setFriends] = React.useState([]);
     const [onlinePlayers, setOnlinePlayers] = React.useState([]);
+    const [gameRequests, setGameRequests] = React.useState([]);
 
     const loadData = React.useCallback(async () => {
         try {
@@ -20,6 +21,11 @@ export function Friends(props) {
             if (!friendsRes.ok) throw new Error(`Failed to load friends (${friendsRes.status})`);
             const friendsData = await friendsRes.json();
             setFriends(friendsData);
+
+            const gameReqRes = await fetch('/api/game/requests');
+            if (!gameReqRes.ok) throw new Error(`Failed to load game requests (${gameReqRes.status})`);
+            const gameReqData = await gameReqRes.json();
+            setGameRequests(gameReqData);
 
             const onlineRes = await fetch('/api/players/online');
             if (!onlineRes.ok) throw new Error(`Failed to load online players (${onlineRes.status})`);
@@ -34,9 +40,14 @@ export function Friends(props) {
         loadData();
      }, [loadData]);
 
-    function handlePlay(friendName) {
-        // Logic to start a game with the selected friend
-        console.log(`Starting a game with ${friendName}`);
+    async function handlePlay(friendName) {
+        await fetch('/api/game/request/remove', {
+            method: 'DELETE',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ name: friendName })
+        });
+
+        await loadData();
         navigate("/game", { state: { friendName } });
     }
 
@@ -81,6 +92,15 @@ export function Friends(props) {
         });
         loadData();
     }
+
+    async function handleGameRequest(friendName) {
+        await fetch('/api/game/request', {
+            method: 'PUT',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ name: friendName })
+        });
+        await loadData();
+    }
         
 
     return (
@@ -106,9 +126,19 @@ export function Friends(props) {
                             <td>{friend.yourWins}</td>
                             <td>{friend.friendWins}</td>
                             <td>
-                                <button onClick={() => handlePlay(friend.name)}>
-                                    Play
-                                </button>
+                                {!user?.gameRequests?.includes(friend.name) &&
+                                    friend.gameRequest !== true &&
+                                    <button onClick={() => handleGameRequest(friend.name)}>
+                                        Request
+                                    </button>
+                                }
+                                {user?.gameRequests?.includes(friend.name) && <span>Requested...</span>}
+                                {!user?.gameRequests?.includes(friend.name) &&
+                                    friend.gameRequest === true &&
+                                    <button onClick={() => handlePlay(friend.name)}>
+                                        Play
+                                    </button>
+                                }
                             </td>
                         </tr>
                     ))}

@@ -173,7 +173,7 @@ apiRouter.get('/user', verifyAuth, async (req, res) => {
     friends: user.friends,
     pendingRequests: user.pendingRequests,
     friendRequests: user.friendRequests,
-    gameRequest: user.gameRequest,
+    gameRequests: user.gameRequests,
   });
 });
 
@@ -203,6 +203,61 @@ apiRouter.get('/duck', async (req, res) => {
   }
   const duckData = await duck.json();
   res.send({ url: duckData.url });
+});
+
+// Get game requests
+apiRouter.get('/game/requests', verifyAuth, async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  if (user) {
+    res.send(user.gameRequests);
+  } else {
+    res.status(401).send({ msg: 'Unauthorized' });
+  }
+});
+
+// Add game request
+apiRouter.put('/game/request', verifyAuth, async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  const friend = await findUser('userName', req.body.name);
+  if (user && friend) {
+    user.gameRequests.push(friend.userName);
+    const friendUser = friend.friends.find(f => f.name === user.userName);
+    if (friendUser) {
+      friendUser.gameRequest = true;
+    }
+    else {
+      res.status(404).send({ msg: 'Friend relationship not found' });
+      return;
+    }
+    res.send({ msg: 'Game request sent' });
+  } else {
+    res.status(404).send({ msg: 'User or friend not found' });
+  }
+});
+
+// Remove game request
+apiRouter.delete('/game/request/remove', verifyAuth, async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  const friend = await findUser('userName', req.body.name);
+  if (user && friend) {
+    user.gameRequests = user.gameRequests.filter(name => name !== friend.userName);
+    friend.gameRequests = friend.gameRequests.filter(name => name !== user.userName);
+
+    const userFriend = user.friends.find(f => f.name === friend.userName);
+    const friendUser = friend.friends.find(f => f.name === user.userName);
+
+    if (!userFriend || !friendUser) {
+      res.status(404).send({ msg: 'Friend relationship not found' });
+      return;
+    }
+
+    userFriend.gameRequest = false;
+    friendUser.gameRequest = false;
+
+    res.send({ msg: 'Game request removed' });
+  } else {
+    res.status(404).send({ msg: 'User or friend not found' });
+  }
 });
 
 // Update multiplayer score
@@ -246,7 +301,7 @@ async function createUser(userName, password) {
     friends: [],
     friendRequests: [],
     pendingRequests: [],
-    gameRequest: null,
+    gameRequests: [],
   };
   users.push(user);
 
