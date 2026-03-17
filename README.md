@@ -100,12 +100,12 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Node.js/Express HTTP service** - I did not complete this part of the deliverable.
-- [ ] **Static middleware for frontend** - I did not complete this part of the deliverable.
-- [ ] **Calls to third party endpoints** - I did not complete this part of the deliverable.
-- [ ] **Backend service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Frontend calls service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Supports registration, login, logout, and restricted endpoint** - I did not complete this part of the deliverable.
+- [x] **Node.js/Express HTTP service** - My service endpoints are found within index.js under the service directory.
+- [x] **Static middleware for frontend** - I used middleware to ensure calls to endpoints that require sign in are not accessible without a valid authToken.
+- [x] **Calls to third party endpoints** - In index.js on the server, the '/duck' endpoint calls a third party endpoint to grab a random picture of a duck. This picture is displayed on the profile page (profile.jsx).
+- [x] **Backend service endpoints** - Backend service endpoints cover functionality for retrieving and altering users, friends, game requests, scores, online players, and friend requests.
+- [x] **Frontend calls service endpoints** - In friends.jsx, calls are made to the friend-related server endpoints. In gameSession.jsx, calls are made to the scores endpoints. In profile.jsx, calls are made to the duck endpoint and the user endpoints.
+- [x] **Supports registration, login, logout, and restricted endpoint** - Login/registration/logout functionality is demonstrated on the home page of the application (login.jsx and profile.jsx). The verfiyAuth middleware is used to ensure all sign-in-required calls are protected. These calls include friend data and scores data.
 
 ## 🚀 DB deliverable
 
