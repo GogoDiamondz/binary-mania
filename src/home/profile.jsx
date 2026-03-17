@@ -6,6 +6,12 @@ import './profile.css';
 export function Profile(props) {
   const navigate = useNavigate();
   const [bestTime, setBestTime] = React.useState(null);
+  const [duckImageUrl, setDuckImageUrl] = React.useState('../../public/duck.jpg');
+
+  React.useEffect(() => {
+    loadBestTime();
+    loadDuckImage().then(url => setDuckImageUrl(url));
+  }, []);
 
   async function loadBestTime() {
     try {
@@ -18,9 +24,17 @@ export function Profile(props) {
     }
   }
 
-  React.useEffect(() => {
-    loadBestTime();
-  }, []);
+  async function loadDuckImage() {
+    try {
+      const duckRes = await fetch('/api/duck');
+      if (!duckRes.ok) throw new Error(`Failed to load duck image (${duckRes.status})`);
+      const duckData = await duckRes.json();
+      return duckData.url;
+    } catch (err) {
+      console.error(err);
+      return '../../public/duck.jpg'; // Fallback image
+    }
+  }
 
   function clickPlay() {
     navigate("/play");
@@ -44,7 +58,7 @@ export function Profile(props) {
       <h1>{props.userName}'s Profile</h1>
       <p>Best Time: {bestTime}</p>
       {/* Random image of a duck, replace with 3rd party API duck image */}
-      <img src="duck.jpg" alt="duck" width="400px" />
+      <img src={duckImageUrl} alt="duck" width="400px" />
       <div className="navigation-buttons">
         <button id="play" onClick={() => clickPlay()}>Play</button>
         <button id="friends" onClick={() => clickFriends()}>Friends</button>

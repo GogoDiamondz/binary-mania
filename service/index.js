@@ -195,6 +195,16 @@ apiRouter.put('/singleplayer/score', verifyAuth, async (req, res) => {
   }
 });
 
+apiRouter.get('/duck', async (req, res) => {
+  const duck = await fetch('https://random-d.uk/api/random');
+  if (!duck.ok) {
+    res.status(500).send({ msg: 'Failed to fetch duck image' });
+    return;
+  }
+  const duckData = await duck.json();
+  res.send({ url: duckData.url });
+});
+
 // Update multiplayer score
 apiRouter.put('/multiplayer/score', verifyAuth, async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
@@ -218,7 +228,6 @@ apiRouter.put('/multiplayer/score', verifyAuth, async (req, res) => {
     res.status(404).send({ msg: 'User or friend not found' });
   }
 });
-
 
 // Default error handler
 app.use(function (err, req, res, next) {
