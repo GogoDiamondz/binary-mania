@@ -18,3 +18,16 @@ const onlineCollection = db.collection('onlinePlayers');
     process.exit(1);
   }
 })();
+
+async function findUser(field, value) {
+  return await userCollection.findOne({ [field]: value });
+}
+
+async function addUser(user) {
+  await userCollection.insertOne(user);
+}
+
+module.exports = {
+  addUser,
+  findUser
+}

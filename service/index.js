@@ -5,12 +5,11 @@ const bcrypt = require('bcryptjs');
 const express = require('express');
 const uuid = require('uuid');
 const app = express();
+const DB = require('./database.js');
 
 const Friend = require('./friend.js');
 
 const authCookieName = 'token';
-
-let users = [];
 
 app.use(express.static('public'));
 app.use(express.json());
@@ -303,15 +302,14 @@ async function createUser(userName, password) {
     pendingRequests: [],
     gameRequests: [],
   };
-  users.push(user);
+  await DB.addUser(user);
 
   return user;
 }
 
 async function findUser(field, value) {
   if (!value) return null;
-
-  return users.find((u) => u[field] === value);
+  return await DB.findUser(field, value);
 }
 
 // setAuthCookie in the HTTP response
