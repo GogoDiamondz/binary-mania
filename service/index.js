@@ -88,8 +88,8 @@ apiRouter.put('/friends', verifyAuth, async (req, res) => {
   const friend = await findUser('userName', req.body.name);
   if (user && friend) {
     if (!user.friends.map(f => f.name).includes(req.body.name)) {
-      user.friends.push(new Friend(friend.userName));
-      friend.friends.push(new Friend(user.userName));
+      await DB.addFriend(user, new Friend(friend.userName));
+      await DB.addFriend(friend, new Friend(user.userName));
       res.send({ msg: 'Friend added' });
     } else {
       res.status(409).send({ msg: 'Already friends' });
@@ -104,8 +104,8 @@ apiRouter.put('/friends/request', verifyAuth, async (req, res) => {
   const friend = await findUser('userName', req.body.name);
   if (user && friend) {
     if (!user.pendingRequests.includes(req.body.name) && !user.friends.includes(req.body.name)) {
-      user.pendingRequests.push(friend.userName);
-      friend.friendRequests.push(user.userName);
+      await DB.addPendingRequest(user, req.body.name);
+      await DB.addFriendRequest(friend, user.userName);
       res.send({ msg: 'Friend request sent' });
     } else {
       res.status(409).send({ msg: 'Request already sent or already friends' });
@@ -120,7 +120,7 @@ apiRouter.delete('/friends/request/remove', verifyAuth, async (req, res) => {
   const friend = await findUser('userName', req.body.name);
   if (user && friend) {
     if (user.friendRequests.includes(req.body.name)) {
-      user.friendRequests = user.friendRequests.filter(name => name !== req.body.name);
+      await DB.removeFriendRequest(user, req.body.name);
       res.send({ msg: 'Friend request removed' });
     } else {
       res.status(404).send({ msg: 'Friend request not found' });
@@ -136,7 +136,7 @@ apiRouter.delete('/friends/request/pending/remove', verifyAuth, async (req, res)
   const friend = await findUser('userName', req.body.name);
   if (user && friend) {
     if (friend.pendingRequests.includes(user.userName)) {
-      friend.pendingRequests = friend.pendingRequests.filter(name => name !== user.userName);
+      await DB.removePendingRequest(friend, user.userName);
       res.send({ msg: `${user.userName} removed from ${friend.userName}'s pending requests` });
     } else {
       res.status(404).send({ msg: 'Pending request not found' });

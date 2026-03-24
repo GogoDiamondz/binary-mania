@@ -42,11 +42,37 @@ async function updateUserRemoveAuth(user) {
   await userCollection.updateOne({ userName: user.userName }, { $unset: { token: 1 } });
 }
 
+async function addPendingRequest(user, friendName) {
+  await userCollection.updateOne({ userName: user.userName }, { $push: { pendingRequests: friendName } });
+}
+
+async function addFriendRequest(user, friendName) {
+  await userCollection.updateOne({ userName: user.userName }, { $push: { friendRequests: friendName } });
+}
+
+async function addFriend(user, friend) {
+  await userCollection.updateOne({ userName: user.userName }, { $push: { friends: friend } });
+}
+
+async function removeFriendRequest(user, friendName) {
+  await userCollection.updateOne({ userName: user.userName }, { $pull: { friendRequests: friendName } });
+}
+
+async function removePendingRequest(user, friendName) {
+  await userCollection.updateOne({ userName: user.userName }, { $pull: { pendingRequests: friendName } });
+}
+
+
 module.exports = {
   addUser,
   findUser,
   getOnlinePlayers,
   updateOnlineStatus,
   updateUserToken,
-  updateUserRemoveAuth
+  updateUserRemoveAuth,
+  addPendingRequest,
+  addFriendRequest,
+  addFriend,
+  removeFriendRequest,
+  removePendingRequest
 }
