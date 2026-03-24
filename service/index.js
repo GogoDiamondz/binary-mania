@@ -34,10 +34,11 @@ apiRouter.post('/auth/login', async (req, res) => {
   const user = await findUser('userName', req.body.userName);
   if (user) {
     if (await bcrypt.compare(req.body.password, user.password)) {
-      user.token = uuid.v4();
-      await DB.updateUser(user);
-      setAuthCookie(res, user.token);
-      res.send({ userName: user.userName });
+      const token = uuid.v4();
+      await DB.updateUserToken(user, token);
+      setAuthCookie(res, token);
+      await DB.updateOnlineStatus(user.userName, true);
+      res.send({ userName: req.body.userName });
       return;
     }
   }
