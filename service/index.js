@@ -24,7 +24,6 @@ apiRouter.post('/auth/create', async (req, res) => {
     res.status(409).send({ msg: 'Existing user' });
   } else {
     const user = await createUser(req.body.userName, req.body.password);
-    user.online = true;
     setAuthCookie(res, user.token);
     res.send({ userName: user.userName });
   }
@@ -36,7 +35,7 @@ apiRouter.post('/auth/login', async (req, res) => {
   if (user) {
     if (await bcrypt.compare(req.body.password, user.password)) {
       user.token = uuid.v4();
-      user.online = true;
+      await DB.updateOnlineStatus(user.userName, true);
       setAuthCookie(res, user.token);
       res.send({ userName: user.userName });
       return;
@@ -50,8 +49,7 @@ apiRouter.delete('/auth/logout', async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
     delete user.token;
-    //FIXME: uncomment this
-    //user.online = false;
+    await DB.updateOnlineStatus(user.userName, false);
   }
   res.clearCookie(authCookieName);
   res.status(204).end();
@@ -68,8 +66,8 @@ const verifyAuth = async (req, res, next) => {
 };
 
 // Get online players
-apiRouter.get('/players/online', verifyAuth, (req, res) => {
-  const onlinePlayers = users.filter(u => u.online);
+apiRouter.get('/players/online', verifyAuth, async (req, res) => {
+  const onlinePlayers = await DB.getOnlinePlayers();
   res.send(onlinePlayers);
 });
 
@@ -295,7 +293,7 @@ async function createUser(userName, password) {
     userName: userName,
     password: passwordHash,
     token: uuid.v4(),
-    online: false,
+    online: true,
     bestTime: 'None',
     friends: [],
     friendRequests: [],

@@ -5,7 +5,6 @@ const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostna
 const client = new MongoClient(url);
 const db = client.db('mania');
 const userCollection = db.collection('users');
-const onlineCollection = db.collection('onlinePlayers');
 
 // This will asynchronously test the connection and exit the process if it fails
 (async function testConnection() {
@@ -27,7 +26,16 @@ async function addUser(user) {
   await userCollection.insertOne(user);
 }
 
+async function getOnlinePlayers() {
+  return await userCollection.find({ online: true }).toArray();
+}
+
+async function updateOnlineStatus(userName, online) {
+  await userCollection.updateOne({ userName: userName }, { $set: { online: online } });
+}
+
 module.exports = {
   addUser,
-  findUser
+  findUser,
+  getOnlinePlayers
 }
