@@ -34,9 +34,14 @@ async function updateOnlineStatus(userName, online) {
   await userCollection.updateOne({ userName: userName }, { $set: { online: online } });
 }
 
+async function updateUserRemoveAuth(user) {
+  await userCollection.updateOne({ userName: user.userName }, { $unset: { token: 1 } });
+}
+
 module.exports = {
   addUser,
   findUser,
   getOnlinePlayers,
-  updateOnlineStatus
+  updateOnlineStatus,
+  updateUserRemoveAuth
 }
