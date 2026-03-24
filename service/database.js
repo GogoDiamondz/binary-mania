@@ -37,5 +37,6 @@ async function updateOnlineStatus(userName, online) {
 module.exports = {
   addUser,
   findUser,
-  getOnlinePlayers
+  getOnlinePlayers,
+  updateOnlineStatus
 }
