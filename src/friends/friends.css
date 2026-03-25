@@ -37,7 +37,14 @@ th, td {
     margin-right: 0.5em;
 }
 
-.remove-friend {
+td.actions {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.4em;
+    align-items: center;
+}
+
+.remove-friend, .withdraw-game-request, .decline-game-request {
     background-color: red;
     color: white;
 }

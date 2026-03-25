@@ -230,17 +230,26 @@ apiRouter.put('/game/request', verifyAuth, async (req, res) => {
   }
 });
 
-// Remove game request
+async function clearGameRequest(user, friend) {
+  await DB.removeGameRequest(user, friend.userName);
+  await DB.removeGameRequest(friend, user.userName);
+
+  const userFriend = user.friends.find(f => f.name === friend.userName);
+  const friendUser = friend.friends.find(f => f.name === user.userName);
+
+  if (userFriend) {
+    await DB.setGameRequest(user, userFriend, false);
+  }
+  if (friendUser) {
+    await DB.setGameRequest(friend, friendUser, false);
+  }
+}
+
 apiRouter.delete('/game/request/remove', verifyAuth, async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
   const friend = await findUser('userName', req.body.name);
   if (user && friend) {
-    await DB.removeGameRequest(user, friend.userName);
-    await DB.removeGameRequest(friend, user.userName);
-
-    await DB.setGameRequest(friend, friend.friends.find(f => f.name === user.userName), false);
-    await DB.setGameRequest(user, user.friends.find(f => f.name === friend.userName), false);
-
+    await clearGameRequest(user, friend);
     res.send({ msg: 'Game request removed' });
   } else {
     res.status(404).send({ msg: 'User or friend not found' });

@@ -102,6 +102,15 @@ export function Friends(props) {
         await loadData();
     }
 
+    async function handleRemoveGameRequest(friendName) {
+        await fetch('/api/game/request/remove', {
+            method: 'DELETE',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ name: friendName })
+        });
+        await loadData();
+    }
+
     async function handleRemoveFriend(friendName) {
         await fetch(`/api/friends/${friendName}`, {
             method: 'DELETE',
@@ -132,20 +141,35 @@ export function Friends(props) {
                             <td>{friend.name}</td>
                             <td>{friend.yourWins}</td>
                             <td>{friend.friendWins}</td>
-                            <td>
+                            <td className="actions">
                                 {!user?.gameRequests?.includes(friend.name) &&
                                     friend.gameRequest !== true &&
                                     <button onClick={() => handleGameRequest(friend.name)} className="game-button">
                                         Request
                                     </button>
                                 }
-                                {user?.gameRequests?.includes(friend.name) && <span>Requested...</span>}
+
+                                {user?.gameRequests?.includes(friend.name) && (
+                                    <>
+                                        <button onClick={() => handleRemoveGameRequest(friend.name)} className="withdraw-game-request">
+                                            Withdraw
+                                        </button>
+                                        <span>Requested...</span>
+                                    </>
+                                )}
+
                                 {!user?.gameRequests?.includes(friend.name) &&
                                     friend.gameRequest === true &&
-                                    <button onClick={() => handlePlay(friend.name)} className="game-button">
-                                        Play
-                                    </button>
+                                    <>
+                                        <button onClick={() => handlePlay(friend.name)} className="game-button">
+                                            Play
+                                        </button>
+                                        <button onClick={() => handleRemoveGameRequest(friend.name)} className="decline-game-request">
+                                            Decline
+                                        </button>
+                                    </>
                                 }
+
                                 <button onClick={() => handleRemoveFriend(friend.name)} className="remove-friend">
                                     Unfriend
                                 </button>
