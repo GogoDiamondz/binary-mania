@@ -74,6 +74,10 @@ async function setGameRequest(friend, friendUser, value) {
   await userCollection.updateOne({ userName: friend.userName }, { $set: { friends: friendItem.friends } });
 }
 
+async function removeGameRequest(user, friendName) {
+  await userCollection.updateOne({ userName: user.userName }, { $pull: { gameRequests: friendName } });
+}
+
 module.exports = {
   addUser,
   findUser,
@@ -87,5 +91,6 @@ module.exports = {
   removeFriendRequest,
   removePendingRequest,
   addGameRequest,
-  setGameRequest
+  setGameRequest,
+  removeGameRequest
 }

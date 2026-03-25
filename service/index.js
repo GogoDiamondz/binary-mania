@@ -238,19 +238,11 @@ apiRouter.delete('/game/request/remove', verifyAuth, async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
   const friend = await findUser('userName', req.body.name);
   if (user && friend) {
-    user.gameRequests = user.gameRequests.filter(name => name !== friend.userName);
-    friend.gameRequests = friend.gameRequests.filter(name => name !== user.userName);
+    await DB.removeGameRequest(user, friend.userName);
+    await DB.removeGameRequest(friend, user.userName);
 
-    const userFriend = user.friends.find(f => f.name === friend.userName);
-    const friendUser = friend.friends.find(f => f.name === user.userName);
-
-    if (!userFriend || !friendUser) {
-      res.status(404).send({ msg: 'Friend relationship not found' });
-      return;
-    }
-
-    userFriend.gameRequest = false;
-    friendUser.gameRequest = false;
+    await DB.setGameRequest(friend, friend.friends.find(f => f.name === user.userName), false);
+    await DB.setGameRequest(user, user.friends.find(f => f.name === friend.userName), false);
 
     res.send({ msg: 'Game request removed' });
   } else {
