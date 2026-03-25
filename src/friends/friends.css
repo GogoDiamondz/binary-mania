@@ -37,6 +37,15 @@ th, td {
     margin-right: 0.5em;
 }
 
+.remove-friend {
+    background-color: red;
+    color: white;
+}
+
+.game-button {
+    margin-right: 0.5em;
+}
+
 @media (max-width: 600px) {
     .table {
         display: block;

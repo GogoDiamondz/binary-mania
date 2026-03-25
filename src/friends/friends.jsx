@@ -101,6 +101,13 @@ export function Friends(props) {
         });
         await loadData();
     }
+
+    async function handleRemoveFriend(friendName) {
+        await fetch(`/api/friends/${friendName}`, {
+            method: 'DELETE',
+        });
+        await loadData();
+    }
         
 
     return (
@@ -128,17 +135,20 @@ export function Friends(props) {
                             <td>
                                 {!user?.gameRequests?.includes(friend.name) &&
                                     friend.gameRequest !== true &&
-                                    <button onClick={() => handleGameRequest(friend.name)}>
+                                    <button onClick={() => handleGameRequest(friend.name)} className="game-button">
                                         Request
                                     </button>
                                 }
                                 {user?.gameRequests?.includes(friend.name) && <span>Requested...</span>}
                                 {!user?.gameRequests?.includes(friend.name) &&
                                     friend.gameRequest === true &&
-                                    <button onClick={() => handlePlay(friend.name)}>
+                                    <button onClick={() => handlePlay(friend.name)} className="game-button">
                                         Play
                                     </button>
                                 }
+                                <button onClick={() => handleRemoveFriend(friend.name)} className="remove-friend">
+                                    Unfriend
+                                </button>
                             </td>
                         </tr>
                     ))}

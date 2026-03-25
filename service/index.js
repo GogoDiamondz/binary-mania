@@ -149,16 +149,13 @@ apiRouter.delete('/friends/request/pending/remove', verifyAuth, async (req, res)
 // Remove a friend
 apiRouter.delete('/friends/:friendName', verifyAuth, async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
-  if (user) {
-    const index = user.friends.indexOf(req.params.friendName);
-    if (index > -1) {
-      user.friends.splice(index, 1);
-      res.send({ msg: 'Friend removed' });
-    } else {
-      res.status(404).send({ msg: 'Friend not found' });
-    }
+  const friend = await findUser('userName', req.params.friendName);
+  if (user && friend) {
+    await DB.removeFriend(user, req.params.friendName);
+    await DB.removeFriend(friend, user.userName);
+    res.send({ msg: 'Friend removed' });
   } else {
-    res.status(401).send({ msg: 'Unauthorized' });
+    res.status(404).send({ msg: 'User or friend not found' });
   }
 });
 
