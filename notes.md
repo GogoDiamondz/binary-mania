@@ -86,3 +86,4 @@ Changed layout of game: "Play" now leads to "Game session" which holds capabilit
 
 Needs implementation:
 - remove friends
+- remove game requests

@@ -62,6 +62,17 @@ async function removePendingRequest(user, friendName) {
   await userCollection.updateOne({ userName: user.userName }, { $pull: { pendingRequests: friendName } });
 }
 
+async function addGameRequest(user, friendName) {
+  await userCollection.updateOne({ userName: user.userName }, { $push: { gameRequests: friendName } });
+}
+
+async function setGameRequest(friend, friendUser, value) {
+  // Access the friend's friend list, find the friend object for the user, and change the gameRequest boolean
+  const friendItem = await userCollection.findOne({ userName: friend.userName });
+  const friendUserIndex = friendItem.friends.findIndex(f => f.name === friendUser.name);
+  friendItem.friends[friendUserIndex].gameRequest = value;
+  await userCollection.updateOne({ userName: friend.userName }, { $set: { friends: friendItem.friends } });
+}
 
 module.exports = {
   addUser,
@@ -74,5 +85,7 @@ module.exports = {
   addFriendRequest,
   addFriend,
   removeFriendRequest,
-  removePendingRequest
+  removePendingRequest,
+  addGameRequest,
+  setGameRequest
 }

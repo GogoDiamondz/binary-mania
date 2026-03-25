@@ -218,10 +218,10 @@ apiRouter.put('/game/request', verifyAuth, async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
   const friend = await findUser('userName', req.body.name);
   if (user && friend) {
-    user.gameRequests.push(friend.userName);
+    await DB.addGameRequest(user, friend.userName);
     const friendUser = friend.friends.find(f => f.name === user.userName);
     if (friendUser) {
-      friendUser.gameRequest = true;
+      await DB.setGameRequest(friend, friendUser, true);
     }
     else {
       res.status(404).send({ msg: 'Friend relationship not found' });
