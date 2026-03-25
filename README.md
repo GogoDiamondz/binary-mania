@@ -111,8 +111,8 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Stores data in MongoDB** - I did not complete this part of the deliverable.
-- [ ] **Stores credentials in MongoDB** - I did not complete this part of the deliverable.
+- [x] **Stores data in MongoDB** - The name of the database is 'mania', and users are stored there with their properties. Code for the database can be found in database.js under the service directory.
+- [x] **Stores credentials in MongoDB** - Credentials are included in the user data in the mania database.
 
 ## 🚀 WebSocket deliverable
 
