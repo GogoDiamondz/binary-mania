@@ -186,7 +186,7 @@ apiRouter.get('/singleplayer/score', verifyAuth, async (req, res) => {
 apiRouter.put('/singleplayer/score', verifyAuth, async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
-    user.bestTime = req.body.bestTime;
+    await DB.updateBestTime(user, req.body.bestTime);
     res.send({ msg: 'Best time updated' });
   } else {
     res.status(404).send({ msg: 'User not found' });

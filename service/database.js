@@ -90,6 +90,10 @@ async function removeGameRequest(user, friendName) {
   await userCollection.updateOne({ userName: user.userName }, { $pull: { gameRequests: friendName } });
 }
 
+async function updateBestTime(user, bestTime) {
+  await userCollection.updateOne({ userName: user.userName }, { $set: { bestTime: bestTime } });
+}
+
 module.exports = {
   addUser,
   findUser,
@@ -105,5 +109,6 @@ module.exports = {
   addGameRequest,
   setGameRequest,
   updateMultiplayerWins,
-  removeGameRequest
+  removeGameRequest,
+  updateBestTime
 }
