@@ -259,11 +259,11 @@ apiRouter.put('/multiplayer/score', verifyAuth, async (req, res) => {
     const friendUser = friend.friends.find(f => f.name === user.userName);
     if (userFriend && friendUser) {
       if (req.body.winner === 'user') {
-        userFriend.yourWins += 1;
-        friendUser.friendWins += 1;
+        await DB.updateMultiplayerWins(user, req.body.friendName, 1, 0);
+        await DB.updateMultiplayerWins(friend, user.userName, 0, 1);
       } else if (req.body.winner === 'friend') {
-        userFriend.friendWins += 1;
-        friendUser.yourWins += 1;
+        await DB.updateMultiplayerWins(user, req.body.friendName, 0, 1);
+        await DB.updateMultiplayerWins(friend, user.userName, 1, 0);
       }
       res.send({ msg: 'Multiplayer score updated' });
     } else {

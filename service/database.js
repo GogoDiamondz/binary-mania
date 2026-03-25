@@ -74,6 +74,18 @@ async function setGameRequest(friend, friendUser, value) {
   await userCollection.updateOne({ userName: friend.userName }, { $set: { friends: friendItem.friends } });
 }
 
+async function updateMultiplayerWins(user, friendName, userWinsInc, friendWinsInc) {
+  const userItem = await userCollection.findOne({ userName: user.userName });
+  if (userItem) {
+    const friendIndex = userItem.friends.findIndex(f => f.name === friendName);
+    if (friendIndex !== -1) {
+      userItem.friends[friendIndex].yourWins += userWinsInc;
+      userItem.friends[friendIndex].friendWins += friendWinsInc;
+      await userCollection.updateOne({ userName: user.userName }, { $set: { friends: userItem.friends } });
+    }
+  }
+}
+
 async function removeGameRequest(user, friendName) {
   await userCollection.updateOne({ userName: user.userName }, { $pull: { gameRequests: friendName } });
 }
@@ -92,5 +104,6 @@ module.exports = {
   removePendingRequest,
   addGameRequest,
   setGameRequest,
+  updateMultiplayerWins,
   removeGameRequest
 }
