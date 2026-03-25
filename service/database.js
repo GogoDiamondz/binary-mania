@@ -90,6 +90,10 @@ async function updateMultiplayerWins(user, friendName, userWinsInc, friendWinsIn
   }
 }
 
+async function updateInGameStatus(userName, status) {
+  await userCollection.updateOne({ userName }, { $set: { inGame: status } });
+}
+
 async function removeGameRequest(user, friendName) {
   await userCollection.updateOne({ userName: user.userName }, { $pull: { gameRequests: friendName } });
 }
@@ -112,6 +116,7 @@ module.exports = {
   removePendingRequest,
   addGameRequest,
   setGameRequest,
+  updateInGameStatus,
   updateMultiplayerWins,
   removeGameRequest,
   updateBestTime,

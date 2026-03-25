@@ -59,7 +59,7 @@ export function GameSession(props) {
     }
   }
 
-  function handleGameEnd(winner) {
+  async function handleGameEnd(winner) {
     setGameOver(true);
 
     if (friendName) {
@@ -67,6 +67,16 @@ export function GameSession(props) {
       updateMultiplayerScore(winner);
     } else {
       updateBestTimeIfLower(timeScore);
+    }
+    
+    try {
+      await fetch('/api/game/end', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ name: userName })
+      });
+    } catch (err) {
+      console.error('Failed to clear in-game status', err);
     }
   }
 

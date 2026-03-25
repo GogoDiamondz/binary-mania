@@ -41,6 +41,17 @@ export function Friends(props) {
      }, [loadData]);
 
     async function handlePlay(friendName) {
+        const friendRes = await fetch(`/api/user/${friendName}`);
+        const friend = await friendRes.json();
+        if (friend.inGame) {
+            alert('Friend is already in a game.'); //FIXME: change this to Message Dialogue
+            return;
+        }
+
+        await fetch('/api/game/start', {
+            method: 'POST',
+        });
+
         await fetch('/api/game/request/remove', {
             method: 'DELETE',
             headers: { 'content-type': 'application/json' },

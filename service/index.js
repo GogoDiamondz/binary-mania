@@ -165,12 +165,32 @@ apiRouter.get('/user', verifyAuth, async (req, res) => {
   res.send({
     userName: user.userName,
     bestTime: user.bestTime,
+    inGame: user.inGame,
     friends: user.friends,
     pendingRequests: user.pendingRequests,
     friendRequests: user.friendRequests,
     gameRequests: user.gameRequests,
   });
 });
+
+// Find user by username
+apiRouter.get('/user/:userName', verifyAuth, async (req, res) => {
+  const user = await findUser('userName', req.params.userName);
+  if (user) {
+    res.send({
+      userName: user.userName,
+      bestTime: user.bestTime,
+      inGame: user.inGame,
+      friends: user.friends,
+      pendingRequests: user.pendingRequests,
+      friendRequests: user.friendRequests,
+      gameRequests: user.gameRequests,
+    });
+  } else {
+    res.status(404).send({ msg: 'User not found' });
+  }
+});
+
 
 // Get best time score
 apiRouter.get('/singleplayer/score', verifyAuth, async (req, res) => {
@@ -256,6 +276,26 @@ apiRouter.delete('/game/request/remove', verifyAuth, async (req, res) => {
   }
 });
 
+apiRouter.post('/game/start', verifyAuth, async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  if (user) {
+    await DB.updateInGameStatus(user.userName, true);
+    res.send({ msg: 'Game started' });
+  } else {
+    res.status(404).send({ msg: 'User not found' });
+  }
+});
+
+apiRouter.post('/game/end', verifyAuth, async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  if (user) {
+    await DB.updateInGameStatus(user.userName, false);
+    res.send({ msg: 'Game ended' });
+  } else {
+    res.status(404).send({ msg: 'User not found' });
+  }
+});
+
 // Update multiplayer score
 apiRouter.put('/multiplayer/score', verifyAuth, async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
@@ -293,6 +333,7 @@ async function createUser(userName, password) {
     password: passwordHash,
     token: uuid.v4(),
     online: true,
+    inGame: false,
     bestTime: 'None',
     friends: [],
     friendRequests: [],
