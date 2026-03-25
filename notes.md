@@ -86,3 +86,4 @@ Changed layout of game: "Play" now leads to "Game session" which holds capabilit
 
 Needs implementation:
 - fix the default duck image to work on prod
+- fix friends page cannot be accessed upon refresh on prod
