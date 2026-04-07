@@ -52,10 +52,25 @@ export function Game(props) {
             }
         };
 
-        window.addEventListener('beforeunload', notifyOpponentLeft);
+        const endGameOnServer = () => {
+            if (gameOverRef.current) return;
+            if (navigator.sendBeacon) {
+                navigator.sendBeacon('/api/game/end');
+            } else {
+                fetch('/api/game/end', { method: 'POST', keepalive: true }).catch(() => {});
+            }
+        };
+
+        const handleUnload = () => {
+            notifyOpponentLeft();
+            endGameOnServer();
+        };
+
+        window.addEventListener('beforeunload', handleUnload);
         return () => {
             notifyOpponentLeft();
-            window.removeEventListener('beforeunload', notifyOpponentLeft);
+            endGameOnServer();
+            window.removeEventListener('beforeunload', handleUnload);
         };
     }, []);
 

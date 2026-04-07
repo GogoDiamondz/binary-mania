@@ -77,6 +77,9 @@ export function Friends(props) {
                                 secretNumber: message.data.secretNumber
                             }
                         });
+                        fetch('/api/game/start', {
+                            method: 'POST',
+                        });
                         break;
                     case 'game-request-declined':
                         // Your game request was declined - refresh data
@@ -96,7 +99,7 @@ export function Friends(props) {
         const friendRes = await fetch(`/api/user/${friendName}`);
         const friend = await friendRes.json();
         if (friend.inGame) {
-            alert('Friend is already in a game.'); //FIXME: change this to Message Dialogue
+            alert('Friend is already in a game.');
             return;
         }
 
