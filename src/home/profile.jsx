@@ -6,7 +6,7 @@ import './profile.css';
 export function Profile(props) {
   const navigate = useNavigate();
   const [bestTime, setBestTime] = React.useState(null);
-  const [duckImageUrl, setDuckImageUrl] = React.useState('../../public/duck.jpg');
+  const [duckImageUrl, setDuckImageUrl] = React.useState('/duck.jpg');
 
   React.useEffect(() => {
     loadBestTime();
@@ -32,7 +32,7 @@ export function Profile(props) {
       return duckData.url;
     } catch (err) {
       console.error(err);
-      return '../../public/duck.jpg'; // Fallback image
+      return '/duck.jpg'; // Fallback image
     }
   }
 
