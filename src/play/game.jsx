@@ -2,25 +2,37 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import "./game.css";
+import { useWebSocket } from "../hooks/useWebSocket.js";
 
 export function Game(props) {
     const navigate = useNavigate();
     const userName = props.userName;
-    const friendName = props.friendName
+    const friendName = props.friendName;
+    const secretNumber = props.secretNumber;
     const onGameEnd = props.onGameEnd;
     const gameOver = props.gameOver;
     const onTimeScoreChange = props.onTimeScoreChange;
+    const { isConnected, messages, sendMessage } = useWebSocket(userName);
     const [target, setTarget] = React.useState(0);
     const [hint, setHint] = React.useState("");
     const [guess, setGuess] = React.useState("");
     const [tryAgain, setTryAgain] = React.useState(false);
 
+    // Initialize secret number
     React.useEffect(() => {
-        const randomNum = Math.floor(Math.random() * 256);
-        setTarget(randomNum);
-        console.log(`Target number: ${randomNum}`);
-        console.log(`Binary: ${randomNum.toString(2)}`);
-    }, []);
+        // If multiplayer and secretNumber is provided from WebSocket, use it
+        if (friendName && secretNumber) {
+            setTarget(secretNumber);
+            console.log(`Target number (multiplayer): ${secretNumber}`);
+            console.log(`Binary: ${secretNumber.toString(2)}`);
+        } else {
+            // Single player: generate random number
+            const randomNum = Math.floor(Math.random() * 256);
+            setTarget(randomNum);
+            console.log(`Target number (singleplayer): ${randomNum}`);
+            console.log(`Binary: ${randomNum.toString(2)}`);
+        }
+    }, [friendName, secretNumber]);
 
     function handleBinaryClick(digit) {
         if (gameOver) return;
@@ -46,6 +58,16 @@ export function Game(props) {
         } else {
             setHint("Nailed it.");
             onGameEnd(userName);
+            
+            // Notify opponent of game over in multiplayer
+            if (friendName) {
+                sendMessage({
+                    type: 'game-over',
+                    from: userName,
+                    targetUser: friendName,
+                    data: { finalScore: 'win' }
+                });
+            }
         }
         setTryAgain(true);
     }
@@ -58,18 +80,20 @@ export function Game(props) {
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [friendName, gameOver]);
+    }, [friendName, gameOver, onTimeScoreChange]);
 
-    // Simulate friend winning after 10 seconds for demonstration purposes
+    // Handle incoming messages from opponent
     React.useEffect(() => {
-        if (gameOver) return;
+        if (messages.length > 0 && friendName && !gameOver) {
+            messages.forEach(message => {
+                if (message.type === 'game-over' && message.from === friendName) {
+                    console.log(`Opponent ${friendName} won!`);
+                    onGameEnd(friendName);
+                }
+            });
+        }
+    }, [messages, friendName, gameOver, onGameEnd]);
 
-        const interval = setInterval(() => {
-            onGameEnd(friendName);
-        }, 10000);
-
-        return () => clearInterval(interval);
-    }, [gameOver, friendName, onGameEnd]);
 
     return (
         <div className="game-container">
