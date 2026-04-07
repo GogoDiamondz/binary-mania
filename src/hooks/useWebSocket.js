@@ -10,10 +10,21 @@ export function useWebSocket(userName) {
 
     // Determine WebSocket protocol based on current page protocol
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    // Use the same host/port as the current page
     const host = window.location.hostname;
-    const port = window.location.port ? `:${window.location.port}` : '';
+    
+    // Determine port based on environment
+    let port = '';
+    if (host === 'localhost' || host === '127.0.0.1') {
+      // Dev environment: connect to port 4000
+      port = ':4000';
+    } else if (window.location.port && window.location.port !== '80' && window.location.port !== '443') {
+      // Production/LAN with non-standard port: use same port as page
+      port = `:${window.location.port}`;
+    }
+    // Otherwise no port (production with reverse proxy on standard ports)
+    
     const wsUrl = `${protocol}//${host}${port}`;
+    console.log(`WebSocket URL: ${wsUrl}`);
 
     // Create WebSocket connection
     const socket = new WebSocket(wsUrl);
