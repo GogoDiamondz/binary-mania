@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from "react-router-dom";
 
 import './friends.css';
+import { useWebSocket } from '../hooks/useWebSocket.js';
 
 export function Friends(props) {
     const navigate = useNavigate();
@@ -9,6 +10,9 @@ export function Friends(props) {
     const [friends, setFriends] = React.useState([]);
     const [onlinePlayers, setOnlinePlayers] = React.useState([]);
     const [gameRequests, setGameRequests] = React.useState([]);
+
+    // Initialize WebSocket connection
+    const { isConnected, messages, sendMessage, clearMessages } = useWebSocket(user?.userName);
 
     const loadData = React.useCallback(async () => {
         try {
@@ -40,6 +44,46 @@ export function Friends(props) {
         loadData();
      }, [loadData]);
 
+    // Handle incoming WebSocket messages
+    React.useEffect(() => {
+        if (messages.length > 0) {
+            messages.forEach(message => {
+                switch (message.type) {
+                    case 'friend-request-sent':
+                        // Someone sent you a friend request - refresh data
+                        loadData();
+                        break;
+                    case 'friend-request-accepted':
+                        // Your friend request was accepted - refresh data
+                        loadData();
+                        break;
+                    case 'friend-request-declined':
+                        // Your friend request was declined - refresh data
+                        loadData();
+                        break;
+                    case 'game-request-sent':
+                        // Someone sent you a game request - refresh data
+                        loadData();
+                        break;
+                    case 'game-accepted':
+                        // Game was accepted - navigate to game with goal number
+                        navigate("/play", {
+                            state: {
+                                friendName: message.from,
+                                secretNumber: message.data.secretNumber
+                            }
+                        });
+                        break;
+                    case 'game-over':
+                        // Game ended - could show notification
+                        console.log('Game over:', message);
+                        break;
+                }
+            });
+            clearMessages(); // Clear processed messages
+        }
+    }, [messages, loadData, navigate, clearMessages]);
+
     async function handlePlay(friendName) {
         const friendRes = await fetch(`/api/user/${friendName}`);
         const friend = await friendRes.json();
@@ -47,6 +91,9 @@ export function Friends(props) {
             alert('Friend is already in a game.'); //FIXME: change this to Message Dialogue
             return;
         }
+
+        // Generate a random secret number for the game
+        const secretNumber = Math.floor(Math.random() * 100) + 1;
 
         await fetch('/api/game/start', {
             method: 'POST',
@@ -59,7 +106,16 @@ export function Friends(props) {
         });
 
         await loadData();
-        navigate("/game", { state: { friendName } });
+
+        // Notify both players to start the game with the same goal number
+        sendMessage({
+            type: 'game-accepted',
+            from: user.userName,
+            targetUser: friendName,
+            data: { secretNumber }
+        });
+
+        navigate("/play", { state: { friendName, secretNumber } });
     }
 
     async function handleSendRequest(playerName) {
@@ -69,6 +125,13 @@ export function Friends(props) {
             body: JSON.stringify({ name: playerName })
         });
         await loadData();
+
+        // Notify the target user about the friend request
+        sendMessage({
+            type: 'friend-request-sent',
+            from: user.userName,
+            targetUser: playerName
+        });
     }
 
     async function handleAcceptRequest(requestName) {
@@ -88,6 +151,13 @@ export function Friends(props) {
             body: JSON.stringify({ name: requestName })
         });
         await loadData();
+
+        // Notify the requester that their request was accepted
+        sendMessage({
+            type: 'friend-request-accepted',
+            from: user.userName,
+            targetUser: requestName
+        });
     }
 
     function handleDeclineRequest(requestName) {
@@ -102,6 +172,13 @@ export function Friends(props) {
             body: JSON.stringify({ name: requestName })
         });
         loadData();
+
+        // Notify the requester that their request was declined
+        sendMessage({
+            type: 'friend-request-declined',
+            from: user.userName,
+            targetUser: requestName
+        });
     }
 
     async function handleGameRequest(friendName) {
@@ -111,6 +188,13 @@ export function Friends(props) {
             body: JSON.stringify({ name: friendName })
         });
         await loadData();
+
+        // Notify the friend about the game request
+        sendMessage({
+            type: 'game-request-sent',
+            from: user.userName,
+            targetUser: friendName
+        });
     }
 
     async function handleRemoveGameRequest(friendName) {
