@@ -67,7 +67,7 @@ export function Friends(props) {
                         break;
                     case 'game-accepted':
                         // Game was accepted - navigate to game with goal number
-                        navigate("/play", {
+                        navigate("/game", {
                             state: {
                                 friendName: message.from,
                                 secretNumber: message.data.secretNumber
@@ -115,7 +115,7 @@ export function Friends(props) {
             data: { secretNumber }
         });
 
-        navigate("/play", { state: { friendName, secretNumber } });
+        navigate("/game", { state: { friendName, secretNumber } });
     }
 
     async function handleSendRequest(playerName) {
