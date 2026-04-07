@@ -28,8 +28,11 @@ function peerProxy(httpServer) {
         if (message.targetUser) {
           // Send to specific user
           const targetSocket = userConnections.get(message.targetUser);
+          console.log(`Routing message to ${message.targetUser}:`, message);
           if (targetSocket && targetSocket.readyState === WebSocket.OPEN) {
             targetSocket.send(JSON.stringify(message));
+          } else {
+            console.warn(`Unable to route message to ${message.targetUser}: socket unavailable or closed`);
           }
         } else if (message.broadcast) {
           // Broadcast to all except sender

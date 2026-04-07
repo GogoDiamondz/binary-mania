@@ -19,6 +19,46 @@ export function Game(props) {
     const [guess, setGuess] = React.useState("");
     const [tryAgain, setTryAgain] = React.useState(false);
 
+    const sendMessageRef = React.useRef(sendMessage);
+    const friendNameRef = React.useRef(friendName);
+    const userNameRef = React.useRef(userName);
+    const gameOverRef = React.useRef(gameOver);
+
+    React.useEffect(() => {
+        sendMessageRef.current = sendMessage;
+    }, [sendMessage]);
+
+    React.useEffect(() => {
+        friendNameRef.current = friendName;
+    }, [friendName]);
+
+    React.useEffect(() => {
+        userNameRef.current = userName;
+    }, [userName]);
+
+    React.useEffect(() => {
+        gameOverRef.current = gameOver;
+    }, [gameOver]);
+
+    React.useEffect(() => {
+        const notifyOpponentLeft = () => {
+            if (friendNameRef.current && !gameOverRef.current) {
+                console.log('Sending opponent-left to', friendNameRef.current);
+                sendMessageRef.current({
+                    type: 'opponent-left',
+                    from: userNameRef.current,
+                    targetUser: friendNameRef.current,
+                });
+            }
+        };
+
+        window.addEventListener('beforeunload', notifyOpponentLeft);
+        return () => {
+            notifyOpponentLeft();
+            window.removeEventListener('beforeunload', notifyOpponentLeft);
+        };
+    }, []);
+
     // Initialize secret number
     React.useEffect(() => {
         // If multiplayer and secretNumber is provided from WebSocket, use it
@@ -102,6 +142,11 @@ export function Game(props) {
                 if (message.type === 'game-over' && message.from === friendName) {
                     console.log(`Opponent ${friendName} won!`);
                     onGameEnd(friendName);
+                } else if (message.type === 'opponent-left' && message.from === friendName) {
+                    console.log(`Opponent ${friendName} left the game`);
+                    setHint('Opponent left the game');
+                    setHintClass('');
+                    onGameEnd(null);
                 }
             });
         }

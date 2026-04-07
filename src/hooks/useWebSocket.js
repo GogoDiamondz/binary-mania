@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export function useWebSocket(userName) {
   const [isConnected, setIsConnected] = useState(false);
@@ -62,16 +62,31 @@ export function useWebSocket(userName) {
 
     // Cleanup on unmount
     return () => {
-      socket.close();
+      if (socketRef.current) {
+        const readyState = socketRef.current.readyState;
+        console.log('WebSocket cleanup, readyState=', readyState);
+
+        // Delay close one tick so any leave notifications can still send
+        setTimeout(() => {
+          if (socketRef.current && socketRef.current.readyState !== WebSocket.CLOSED) {
+            socketRef.current.close();
+          }
+        }, 0);
+      }
     };
   }, [userName]);
 
   // Function to send messages
-  const sendMessage = (message) => {
-    if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-      socketRef.current.send(JSON.stringify(message));
+  const sendMessage = useCallback((message) => {
+    const socket = socketRef.current;
+    const readyState = socket?.readyState;
+    if (socket && readyState === WebSocket.OPEN) {
+      console.log('WebSocket send:', message);
+      socket.send(JSON.stringify(message));
+    } else {
+      console.warn('WebSocket send failed, socket not open, readyState=', readyState, message);
     }
-  };
+  }, []);
 
   // Clear messages (useful after processing)
   const clearMessages = () => {
