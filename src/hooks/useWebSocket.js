@@ -8,8 +8,15 @@ export function useWebSocket(userName) {
   useEffect(() => {
     if (!userName) return;
 
+    // Determine WebSocket protocol based on current page protocol
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    // Use the same host/port as the current page
+    const host = window.location.hostname;
+    const port = window.location.port ? `:${window.location.port}` : '';
+    const wsUrl = `${protocol}//${host}${port}`;
+
     // Create WebSocket connection
-    const socket = new WebSocket('ws://localhost:4000');
+    const socket = new WebSocket(wsUrl);
     socketRef.current = socket;
 
     socket.onopen = () => {
