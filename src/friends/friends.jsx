@@ -78,6 +78,10 @@ export function Friends(props) {
                             }
                         });
                         break;
+                    case 'game-request-declined':
+                        // Your game request was declined - refresh data
+                        loadData();
+                        break;
                     case 'game-over':
                         // Game ended - could show notification
                         console.log('Game over:', message);
@@ -208,6 +212,11 @@ export function Friends(props) {
             body: JSON.stringify({ name: friendName })
         });
         await loadData();
+        sendMessage({
+            type: 'game-request-declined',
+            from: user.userName,
+            targetUser: friendName
+        });
     }
 
     async function handleRemoveFriend(friendName) {
