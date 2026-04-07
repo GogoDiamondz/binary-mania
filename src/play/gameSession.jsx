@@ -10,6 +10,7 @@ export function GameSession(props) {
   const location = useLocation();
   const userName = props.userName;
   const friendName = location.state?.friendName || null;
+  const secretNumber = location.state?.secretNumber || null;
   const [gameOver, setGameOver] = React.useState(false);
   const [winner, setWinner] = React.useState(null);
   const [timeScore, setTimeScore] = React.useState(0);
@@ -95,6 +96,7 @@ export function GameSession(props) {
         <Game
           userName={userName}
           friendName={friendName}
+          secretNumber={secretNumber}
           gameOver={gameOver}
           onGameEnd={handleGameEnd}
           onTimeScoreChange={handleTimeScore}
