@@ -118,8 +118,8 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Backend listens for WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **Frontend makes WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **Data sent over WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **WebSocket data displayed** - I did not complete this part of the deliverable.
-- [ ] **Application is fully functional** - I did not complete this part of the deliverable.
+- [x] **Backend listens for WebSocket connection** - I created a proxy server in the service directory.
+- [x] **Frontend makes WebSocket connection** - The frontend uses a hook to assist in organizing messages.
+- [x] **Data sent over WebSocket connection** - Data is sent as friend and game requests/accepts/declines as well as game over and exiting functionality.
+- [x] **WebSocket data displayed** - Data is displayed through the functionality of navigation and friend/game requests.
+- [x] **Application is fully functional** - All features are in place!

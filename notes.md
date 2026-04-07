@@ -84,6 +84,5 @@ This was a lot of fun to see it all come together. I had to keep remembering to 
 
 Changed layout of game: "Play" now leads to "Game session" which holds capabilities for either multiplayer or singleplayer. Multiplayer is accessible through friends menu.
 
-Needs implementation:
-- fix the default duck image to work on prod
-- fix pages cannot be accessed upon refresh on prod
+Next steps:
+- fix friend request decline bug
