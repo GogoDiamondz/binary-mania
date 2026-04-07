@@ -15,6 +15,7 @@ export function Game(props) {
     const { isConnected, messages, sendMessage } = useWebSocket(userName);
     const [target, setTarget] = React.useState(0);
     const [hint, setHint] = React.useState("");
+    const [hintClass, setHintClass] = React.useState("");
     const [guess, setGuess] = React.useState("");
     const [tryAgain, setTryAgain] = React.useState(false);
 
@@ -53,10 +54,13 @@ export function Game(props) {
 
         if (guessDecimal > target) {
             setHint("Lower");
+            setHintClass("flash-lower");
         } else if (guessDecimal < target) {
             setHint("Higher");
+            setHintClass("flash-higher");
         } else {
             setHint("Nailed it.");
+            setHintClass("");
             onGameEnd(userName);
             
             // Notify opponent of game over in multiplayer
@@ -81,6 +85,16 @@ export function Game(props) {
         return () => clearInterval(interval);
     }, [friendName, gameOver, onTimeScoreChange]);
 
+    // Clear animation class after animation completes so it can be reapplied
+    React.useEffect(() => {
+        if (hintClass) {
+            const timeout = setTimeout(() => {
+                setHintClass("");
+            }, 600); // Match the animation duration
+            return () => clearTimeout(timeout);
+        }
+    }, [hintClass]);
+
     // Handle incoming messages from opponent
     React.useEffect(() => {
         if (messages.length > 0 && friendName && !gameOver) {
@@ -96,7 +110,7 @@ export function Game(props) {
 
     return (
         <div className="game-container">
-            <h1 id="hint">{hint || (gameOver ? "Game Over" : "Guess up to 8 digits")}</h1>
+            <h1 id="hint" className={hintClass}>{hint || (gameOver ? "Game Over" : "Guess up to 8 digits")}</h1>
             <span id="input-container">
             <h2 className="input">{guess}</h2>
             </span>
