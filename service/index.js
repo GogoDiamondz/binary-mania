@@ -361,6 +361,11 @@ function setAuthCookie(res, authToken) {
   });
 }
 
+// Serve index.html for all non-API routes
+app.use((req, res) => {
+  res.sendFile('public/index.html', { root: '.' });
+});
+
 const httpService = app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
