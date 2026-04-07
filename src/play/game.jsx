@@ -65,7 +65,6 @@ export function Game(props) {
                     type: 'game-over',
                     from: userName,
                     targetUser: friendName,
-                    data: { finalScore: 'win' }
                 });
             }
         }

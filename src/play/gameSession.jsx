@@ -65,7 +65,10 @@ export function GameSession(props) {
 
     if (friendName) {
       setWinner(winner);
-      updateMultiplayerScore(winner);
+      // Only the winner updates the score to avoid duplicate counting
+      if (winner === userName) {
+        updateMultiplayerScore(winner);
+      }
     } else {
       updateBestTimeIfLower(timeScore);
     }
