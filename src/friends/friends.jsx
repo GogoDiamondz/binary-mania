@@ -61,6 +61,10 @@ export function Friends(props) {
                         // Your friend request was declined - refresh data
                         loadData();
                         break;
+                    case 'friend-removed':
+                        // You've been unfriended - refresh data
+                        loadData();
+                        break;
                     case 'game-request-sent':
                         // Someone sent you a game request - refresh data
                         loadData();
@@ -211,6 +215,13 @@ export function Friends(props) {
             method: 'DELETE',
         });
         await loadData();
+
+        // Notify the friend that they've been unfriended
+        sendMessage({
+            type: 'friend-removed',
+            from: user.userName,
+            targetUser: friendName
+        });
     }
         
 
